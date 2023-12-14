@@ -1,3 +1,4 @@
+#include <stdio.h>
 int B = 2;
 void func(int **p) { *p = &B; }
 int main() {
