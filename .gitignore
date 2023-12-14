@@ -1,4 +1,9 @@
-week1/abs/abs.o
+week1/abs/*.o
+week1/abs/a.out
 
-week1/min/min.o
+week1/min/*.o
+week1/min/a.out
+
+week1/c pointer/*.o
+week1/c pointer/a.out
 
