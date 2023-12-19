@@ -1,0 +1,36 @@
+變數位址	變數值		變數名稱
+0xXXXXXXXX	2			b
+0xYYYYYYYY	0xXXXXXXXX	pointer
+
+指標(Pointer): 某變數的位址
+指標變數(Pointer Variable): 用來存放指標的變數
+
+&b = 0xXXXXXXXX(取出變數的位址)
+*&b = 2(取出位址的值)
+
+-------------------------------------------------------------
+
+變數位址		變數值		變數名稱	程式碼
+0xXXXXXXXX		2(int)		b			int b = 2;
+0xYYYYYYYY		0xXXXXXXXX	pointer		int *pointer = &b;
+
+int *pointer = &b;
+-> *表示這個變數是指標
+-> pointer 表示這個變數的名稱
+-> int 代表這個指標變數指向的變數的類型
+
+-------------------------------------------------------------
+
+int b = 2;
+int *pointer = &b;
+*pointer = 100; 表示 &b 這個位址的值被 assign 成 100。
+所以 *pointer = 100, b = 100。
+*pointer 代表的就是變數 b。所以我們可以把 *pointer 當作變數 b 來使用。
+
+-------------------------------------------------------------
+
+void qsort(void *base, size_t nmeb, size_t size,
+           int (*compar)(const void *, const void *));
+-> void *base 是一段記憶體位址
+-> size_t nmeb 是一個單位有多大
+-> size_t size 是數量
