@@ -37,3 +37,13 @@ void qsort(void *base, size_t nmeb, size_t size,
 -> void *base 是一段記憶體位址  
 -> size_t nmeb 是一個單位有多大  
 -> size_t size 是數量  
+
+-------------------------------------------------------------  
+
+In the expression x[i], which is equivalent to (*((x)+(i))), 所以以下程式  
+int main() {  
+&nbsp;&nbsp;&nbsp;&nbsp;int x[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};  
+&nbsp;&nbsp;&nbsp;&nbsp;printf("%d %d %d %d\n", x[4], *(x + 4), *(4 + x), 4[x]);  
+}  
+的結果會是  
+4&nbsp;4&nbsp;4&nbsp;4  
