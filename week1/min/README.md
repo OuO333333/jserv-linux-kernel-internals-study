@@ -15,8 +15,8 @@ Test min function.
        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return b + (a - b) = a
 
 Overflow:  
-    &nbsp;&nbsp;&nbsp;&nbsp;INT32_MIN <= (b - a) <= INT32_MAX 條件成立時, 才會正確。  
-    &nbsp;&nbsp;&nbsp;&nbsp;由於 INT32_MAX - INT32_MIN >= INT32_MAX, 所以 min(INT32_MAX, INT32_MIN)  
+    &nbsp;&nbsp;&nbsp;&nbsp;INT32_MIN <= (a - b) <= INT32_MAX 條件成立時, 才會正確。  
+    &nbsp;&nbsp;&nbsp;&nbsp;由於 INT32_MAX - INT32_MIN >= INT32_MAX, 所以 min(INT32_MAX, INT32_MIN)會錯誤  
 
 類似常見用途:  
     &nbsp;&nbsp;&nbsp;&nbsp;考慮以下程式碼:  
