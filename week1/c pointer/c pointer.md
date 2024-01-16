@@ -47,3 +47,8 @@ int main() {
 }  
 的結果會是  
 4&nbsp;4&nbsp;4&nbsp;4  
+  
+-------------------------------------------------------------  
+
+As formal parameters in a function definition, char s[]; and char *s are equivalent.  
+這個語句指的是在函數定義中，使用 char s[] 和 char *s 作為形式參數是等效的。  
