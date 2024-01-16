@@ -49,6 +49,23 @@ int main() {
 4&nbsp;4&nbsp;4&nbsp;4  
   
 -------------------------------------------------------------  
-
+  
 As formal parameters in a function definition, char s[]; and char *s are equivalent.  
 這個語句指的是在函數定義中，使用 char s[] 和 char *s 作為形式參數是等效的。  
+  
+-------------------------------------------------------------  
+  
+sizeof(int) = 4  
+sizeof(double) = 8
+  
+-------------------------------------------------------------  
+  
+int a[3];  
+struct { double v[3]; double length; } b[17];  
+int calendar[12][31];  
+int main() { }  
+gcc -o s -Og -g gdb.c
+gdb -q s  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/ecd3fff1-b0d6-405b-bb77-655200250f67)  
+&b+1 是遞移整個 b 數組下一個結構體的位置,這邊是遞移到 a, 取決於 compiler 怎麽分配計記憶體。  
+&b[0]+1 是遞移一個 b[0] 佔用的空間。
