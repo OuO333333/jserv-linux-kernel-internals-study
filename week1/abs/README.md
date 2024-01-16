@@ -5,7 +5,7 @@ imp1:
     &nbsp;&nbsp;&nbsp;&nbsp;原理:  
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. 若 x >= 0，產生的 mask 是 0x00000000，做 XOR 之後根本不會變，做完的結果再扣掉 mask 也不會變。  
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. 反之，若 x < 0，產生的 mask 就會是 0xFFFFFFFF，也就是二補數的 -1。上面的作法剛好就是把 x 扣掉 1 之後再反轉所有位元。  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Why?根據 2's complement 的定義, x&#x0304; = (x 的全部位元反轉) + 1, x >0, 因此 x = x&#x0304; - 1)全部位元反轉。  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Why?根據 2's complement 的定義, x&#x0304; = (x 的全部位元反轉) + 1, x >0, 因此 x = (x&#x0304; - 1)全部位元反轉。  
 imp2:  
     &nbsp;&nbsp;&nbsp;&nbsp;原理:  
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. 當 x >= 0 時，mask 為 0，於是回傳值就是 x。  
