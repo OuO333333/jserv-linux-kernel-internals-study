@@ -67,5 +67,5 @@ int main() { }
 gcc -o s -Og -g gdb.c  
 gdb -q s  
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/ecd3fff1-b0d6-405b-bb77-655200250f67)  
-&b+1 是遞移整個 b 數組下一個結構體的位置,這邊是遞移到 a, 取決於 compiler 怎麽分配計記憶體。  
+&b+1 是遞移到整個 b 數組下一個結構體的位置,這邊是遞移到 a, 取決於 compiler 怎麽分配計記憶體。  
 &b[0]+1 是遞移一個 b[0] 佔用的空間。
