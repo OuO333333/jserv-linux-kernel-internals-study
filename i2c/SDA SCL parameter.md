@@ -34,3 +34,34 @@ SDA 的 data 穩定時間指的是, 指的是在 SDA 的上升沿(下降沿), �
 **tHIGH** 後會經過 SCL 的 **tf**,  
 **tf** 後到結束 data valid time 的時間稱之為 **tHD;DAT**(data hold time)。  
 流程為:&nbsp;&nbsp;&nbsp;&nbsp;**tSU;DAT** -> **tr** -> **tLOW** -> **tf** -> **tHD;DAT**  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/f9f1da09-b268-457b-8ebc-991870952212)  
+定義起使條件:  
+當 SCL 和 SDA 都處於高電平時，主設備發送一個低電平脈沖到 SDA, 形成起始條件。  
+  
+**tSU;STA**:&nbsp;&nbsp;&nbsp;&nbsp;Setup Time for Start Condition  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp;&thinsp;**tSU;STA** 表示發送起始條件前, SDA 必須穩定的時間,  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp;&thinsp;為 SCL 上升沿 70%, 到 SDA 下降沿 70% 之前。  
+
+**tHD;STA**:&nbsp;&nbsp;&nbsp;&nbsp;Hold Time for Start Condition  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp;**tHD;STA** 表示在起始條件後, SDA 需要保持穩定的時間,  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp;為 SDA 下降沿 30%, 到 SCL 下降沿 70% 之前。  
+
+START 有三種發生情況  
+1\. 第一個 START, 這邊的 START 不定義 **tSU;STA**  
+2\. STOP & START 相接的 START, 這邊的 START 不定義 **tSU;STA**  
+3\. 同種 operation 下(R/W), 為了切換不同 slave address 而發生的 START,  
+這邊的 START 才有定義 **tSU;STA**  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/057c81bb-c57d-4397-b5ba-2aa07b0e2b3c)  
+
+定義停止條件:  
+當 SCL 處於高電平, SDA 處於低電平時，主設備發送一個高電平脈沖到 SDA, 形成停止條件。  
+
+**tSU;STO**:&nbsp;&nbsp;&nbsp;&nbsp;Setup Time for Stop Condition  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**tSU;STO** 表示在發送停止條件之前，SDA 必須保持在一個可靠的電平上,  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;為 SCL 上升沿 70%, 到 SDA 上升沿 30%。  
+  
+**tBUF**:&nbsp;&nbsp;&nbsp;&nbsp;Bus Free Time  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp;&thinsp;是指在總線上不存在通信活動的時間, 
+即在兩個連續的傳輸周期之間的時間間隔。  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp;&thinsp;**tBUF** 保證在啟動條件和停止條件之後, 總線能夠保持空閒, 以便進行下一次通信。  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp;&thinsp;為停止條件後, SDA 上升沿 70%, 到 SDA 下降沿 70% 的時間。
