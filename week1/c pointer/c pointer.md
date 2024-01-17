@@ -24,16 +24,20 @@
   
 -------------------------------------------------------------  
   
-<pre><code>int b = 2;  
-int *pointer = &b;</code></pre>  
+```c
+int b = 2;  
+int *pointer = &b;  
+```  
 *pointer = 100; 表示 &b 這個位址的值被 assign 成 100。  
 所以 *pointer = 100, b = 100。  
 *pointer 代表的就是變數 b。所以我們可以把 *pointer 當作變數 b 來使用。  
   
 -------------------------------------------------------------  
   
-<pre><code>void qsort(void *base, size_t nmeb, size_t size,  
-           int (*compar)(const void *, const void *));</code></pre>  
+```c
+void qsort(void *base, size_t nmeb, size_t size,  
+           int (*compar)(const void *, const void *));
+```
 -> void *base 是一段記憶體位址  
 -> size_t nmeb 是一個單位有多大  
 -> size_t size 是數量  
@@ -41,10 +45,12 @@ int *pointer = &b;</code></pre>
 -------------------------------------------------------------  
 
 In the expression x[i], which is equivalent to (*((x)+(i))), 所以以下程式  
-<pre><code>int main() {  
-&nbsp;&nbsp;&nbsp;&nbsp;int x[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};  
-&nbsp;&nbsp;&nbsp;&nbsp;printf("%d %d %d %d\n", x[4], *(x + 4), *(4 + x), 4[x]);  
-}</code></pre>  
+```c
+int main() {  
+    int x[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};  
+    printf("%d %d %d %d\n", x[4], *(x + 4), *(4 + x), 4[x]);  
+}
+```
 的結果會是  
 4&nbsp;4&nbsp;4&nbsp;4  
   
@@ -60,10 +66,12 @@ sizeof(double) = 8
   
 -------------------------------------------------------------  
   
-<pre><code>int a[3];  
+```c
+int a[3];  
 struct { double v[3]; double length; } b[17];  
 int calendar[12][31];  
-int main() { }</code></pre>  
+int main() { }
+```
 gcc -o s -Og -g gdb.c  
 gdb -q s  
   
@@ -80,10 +88,14 @@ gdb -q s
 在 C 語言中, b[0].v 和 b[0]->v 是等價的, 兩者都用於訪問結構成員 v。  
 兩種寫法的選擇通常取決於使用的表達風格。  
 1\. b[0].v：使用.運算符，通常在直接使用結構的實例時使用。  
-<pre><code>double d = b[0].v[0];</code></pre>  
+```c
+double d = b[0].v[0];
+```
 2\. b[0]->v：使用->運算符，通常在操作指向結構的指標時使用。  
-<pre><code>struct { double v[3]; double length; } *ptr = &b[0];  
-double firstElement = ptr->v[0];</code></pre>  
+```c
+struct { double v[3]; double length; } *ptr = &b[0];  
+double firstElement = ptr->v[0];
+```
 
  &b[0].v 實際上是 &(b[0].v), 所以是個指標。  
  &b[0]->v 實際上是 &(b[0]->v), 所以是個指標。  
