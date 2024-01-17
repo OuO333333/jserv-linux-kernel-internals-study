@@ -72,7 +72,7 @@ gdb -q s
 簡單來說, +1 也好, -1 也好, 他 +1/-1 的單位取決於前面的 &(?), ? 東西的大小。  
   
 -------------------------------------------------------------  
-
+  
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/43a7cca7-0e72-4fa2-ad9e-1af10641409d)  
 
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/74560aa8-2269-428a-aeed-6c252f1e59b4)![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/1f005f2e-bf62-402c-839d-ae8d2d93e6b7)  
@@ -86,4 +86,19 @@ gdb -q s
 
  &b[0].v 實際上是 &(b[0].v), 所以是個指標。  
  &b[0]->v 實際上是 &(b[0]->v), 所以是個指標。  
- (&b[0])->v 是在取得 b[0] 的地址之後，再使用箭頭運算子 -> 來存取結構的成員 v。這與 b[0].v 是等效的。
+ (&b[0])->v 是在取得 b[0] 的地址之後，再使用箭頭運算子 -> 來存取結構的成員 v。這與 b[0].v 是等效的。  
+  
+-------------------------------------------------------------  
+  
+gcc -o s -g gdb.c  
+gdb s  
+list  
+break 10  
+p b[0].v  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/679a7202-34a6-4364-9d47-19635fd24f70)  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/901b604f-46c7-41c5-8b7a-ea2f5f640260)  
+這是因為原本是個 double(8 bytes), 取值的時候被當成 int(4 bytes), 只取了前面 4 bytes, 所以為 0。  
+下圖顯示了該 double 的 8 個byte。  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/3c35fa3b-5750-4616-9961-7ce2b4d084f2)  
+用 little endian 將 0	0	0	0	0	0	-16	63 排成 0x3FF0000000000000 後, 0x3FF0000000000000 根據 IEEE 754 雙精度浮點轉成 double 後即為 1。
+
