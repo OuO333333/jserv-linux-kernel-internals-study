@@ -100,5 +100,17 @@ p b[0].v
 這是因為原本是個 double(8 bytes), 取值的時候被當成 int(4 bytes), 只取了前面 4 bytes, 所以為 0。  
 下圖顯示了該 double 的 8 個byte。  
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/3c35fa3b-5750-4616-9961-7ce2b4d084f2)  
-用 little endian 將 0	0	0	0	0	0	-16	63 排成 0x3FF0000000000000 後, 0x3FF0000000000000 根據 IEEE 754 雙精度浮點轉成 double 後即為 1。
+用 little endian 將 0	0	0	0	0	0	-16	63 排成 0x3FF0000000000000 後, 0x3FF0000000000000 根據 IEEE 754 雙精度浮點轉成 double 後即為 1。  
+  
+-------------------------------------------------------------  
+
+gcc -o s -g gdb.c  
+gdb s  
+break 11  
+run  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/4918e790-6192-456d-870d-e95ce34049e2)  
+用 memcpy 將 b[0] copy 到 calendar,  
+p calendar[0][0] 讀取時因為 calendar 是 int, 所以只讀 4 bytes, 為0。  
+p *(double *) &calendar[0][0] 讀取時是讀 8 bytes, 所以是 1。
+
 
