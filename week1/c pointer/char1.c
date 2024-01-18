@@ -4,6 +4,5 @@ char *func(){
     return p;
 }
 int main(){
-    printf("%p\n", func());
-    printf("%x\n", func());
+    printf("%p\n", func());  // 使用 %p 來印出指標的地址
 }

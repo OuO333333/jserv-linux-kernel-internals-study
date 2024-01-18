@@ -1,9 +1,9 @@
 #include <stdio.h>
-char *func(){
-    char *p = "hello world";
+const char *func() {
+    const char *p = "hello world";
     return p;
 }
-int main(){
-    printf("%p\n", func());
-    printf("%x\n", func());
+int main() {
+    printf("%p\n", (void *)func());  // 使用 %p 來印出指標的地址
+    return 0;
 }
