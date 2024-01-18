@@ -180,6 +180,7 @@ int main(){
     printf("%p\n", func());  // 使用 %p 來印出指標的地址
 }
 ```
+gcc -o char1 char1.c  
 在 func 函式中，宣告了一個 loacl 陣列 p，然後將它的地址返回。  
 然而，這樣做是不安全的，因為一旦 func 函式執行完畢，p 的生命週期結束，它指向的記憶體將被釋放。  
 在 main 函式中印出 func() 的地址時，可能會導致未定義的行為。  
@@ -194,4 +195,5 @@ int main() {
     return 0;
 }
 ```
+gcc -o char2 char2.c  
 注意, char *p = "hello world"; 是不能 p[0] = 'H'; 的。, 所以加上了 const。 
