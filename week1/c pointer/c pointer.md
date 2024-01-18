@@ -136,7 +136,7 @@ int main(int argc, char (*argv)[0])
   puts(((char **) argv)[0]);
   return 0;
 }
-```c
+```
 gcc -o arg arg.c
 ln -s arg myexec
 ln -l arg myexec  
