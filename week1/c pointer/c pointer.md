@@ -137,3 +137,14 @@ int main(int argc, char (*argv)[0])
 }
 ```c
 gcc -o arg arg.c
+ln -s arg myexec
+ln -l arg myexec  
+./myexec 會得到  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/c2c61c09-d4a0-4727-abdf-ed4c74c2d634)  
+gcc -o arg arg.c -O0 -g  
+gdb -q arg  
+b main(設置 main 為中斷點)  
+r(run)
+print *((char **) argv)  
+
+
