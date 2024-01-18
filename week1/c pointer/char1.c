@@ -4,4 +4,5 @@ char *func(){
 }
 int main(){
     printf("%p\n", func());
+    printf("%x\n", func());
 }
