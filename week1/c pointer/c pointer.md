@@ -150,7 +150,7 @@ print *((char **) argv) 會得到
 $1 = 0x7fffffffe7c9  
   
 -------------------------------------------------------------  
-
+  
 int main(int argc, char *argv[]) vs int main(int argc, char **argv)
 為什麽這兩個是等價的?
 ```c
@@ -163,5 +163,10 @@ argv[0] = &arg1, argv[1] = &arg2, ...
 ```c
 int main(int argc, char **argv)
 ```
-可以將 argv 視為一個指向指針陣列的指針, 有點先射再畫靶的概念。
+可以將 argv 視為一個指向指針陣列的指針, 有點先射再畫靶的概念。  
+https://www.cnblogs.com/baochuan/archive/2012/03/22/2410821.html  
+https://www.cnblogs.com/baochuan/archive/2012/03/26/2414062.html  
 
+  
+-------------------------------------------------------------  
+  
