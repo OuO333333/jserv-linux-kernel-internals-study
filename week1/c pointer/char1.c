@@ -1,3 +1,4 @@
+#include <stdio.h>
 char *func(){
     char p[] = "hello world";
     return p;
