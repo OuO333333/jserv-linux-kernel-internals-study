@@ -128,6 +128,7 @@ p *(double *) &calendar[0][0] 讀取時是讀 8 bytes, 所以是 1。
   
 -------------------------------------------------------------  
 
+這段可不看
 ```c
 #include <stdio.h>
 int main(int argc, char (*argv)[0])
@@ -145,6 +146,22 @@ gcc -o arg arg.c -O0 -g
 gdb -q arg  
 b main(設置 main 為中斷點)  
 r(run)
-print *((char **) argv)  
+print *((char **) argv) 會得到
+$1 = 0x7fffffffe7c9  
+  
+-------------------------------------------------------------  
 
+int main(int argc, char *argv[]) vs int main(int argc, char **argv)
+為什麽這兩個是等價的?
+```c
+int main(int argc, char *argv[])
+```
+char *argv[] 是一組指針數組, 其中每個 element 都是指向 char 的指針,
+argv[0] = &arg1, argv[1] = &arg2, ...  
+這些都是 char *,  
+而 argv 是這個數組的變數名稱, 所以 argv = &argv[0], argv 是一個 char **。  
+```c
+int main(int argc, char **argv)
+```
+可以將 argv 視為一個指向指針陣列的指針, 有點先射再畫靶的概念。
 
