@@ -227,7 +227,7 @@ and a + 1 is actually 40 bytes ahead of a, so it does not act like
 an "int *".  
   
 -------------------------------------------------------------  
-
+  
 ```c
 static bool rate_control_cap_mask(struct ieee80211_sub_if_data *sdata,
                                   struct ieee80211_supported_band *sband,
@@ -243,3 +243,47 @@ for (i = 0; i < sizeof(mcs_mask); i++)
 ```c
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
 ```
+  
+-------------------------------------------------------------  
+  
+```c
+struct mychar_device_data {
+    struct cdev cdev;
+    char buffer[BUF_LEN];
+    int buffer_index;
+    wait_queue_head_t wait_queue;
+    spinlock_t spinlock;
+    int process_count;
+};
+struct mychar_device_data *mychar_data = &mychardev_data[minor_num];
+```
+考慮以上程式碼
+```c
+if(wait_event_interruptible(mychar_data->wait_queue, mychar_data -> process_count == 0)){
+    return -ERESTARTSYS; /* signal received or interrupted */
+}
+```
+上面的編譯會通過, 雖然 mychar_data->wait_queue 是個變量, 但他會被解釋成指針, 所以會過。
+```c
+if(wait_event_interruptible(&mychar_data->wait_queue, mychar_data -> process_count == 0)){
+    return -ERESTARTSYS; /* signal received or interrupted */
+}
+```
+上面的編譯會不會通過, 會有 error: lvalue required as unary ‘&’ operand。
+因為 &mychar_data->wait_queue 不是一個指針, 是一個 rvalue, 而 wait_event_interruptible 要求 lvalue, 所以不會過。
+example:
+```c
+int a = 10;
+int *E = &a;
+++(*E);  // a = a + 1
+++(a++); // error
+```
+a++ 會回傳 a 的 value, 而這個 value 是暫存值也就是個 non-lvalue(rvalue),  
+而 ++() 這個 operator 的 operand 必須要是一個 lvalue, 因為要寫回 data, 需要有地方 (location) 可寫入。
+```c
+wait_queue_head_t *wq = &mychar_data->wait_queue;
+if(wait_event_interruptible(wq, mychar_data -> process_count == 0)){
+    return -ERESTARTSYS; /* signal received or interrupted */
+}
+```
+上面的編譯會通過, wq 是個 wait_queue_head_t 的指針, 是 lvalue。
