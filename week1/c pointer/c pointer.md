@@ -199,7 +199,7 @@ gcc -o char2 char2.c
 注意, char *p = "hello world"; 是不能 p[0] = 'H'; 的。, 所以加上了 const。 
   
 -------------------------------------------------------------  
-
+  
 指標本身不可變更 (Constant pointer to variable): const 在 * 之後  
 ```c
 char * const pContent;
@@ -212,4 +212,34 @@ char const * pContent;
 兩者都不可變更  
 ```c
 const char * const pContent;
+```
+  
+-------------------------------------------------------------  
+  
+```c
+int fn(int a[][10])
+```
+ends up being equivalent to something like  
+```c
+int fn(int (*a)[10])
+```
+and a + 1 is actually 40 bytes ahead of a, so it does not act like
+an "int *".  
+  
+-------------------------------------------------------------  
+
+```c
+static bool rate_control_cap_mask(struct ieee80211_sub_if_data *sdata,
+                                  struct ieee80211_supported_band *sband,
+                                  struct ieee80211_sta *sta, u32 *mask,
+                                   u8 mcs_mask[IEEE80211_HT_MCS_MASK_LEN])
+```
+這樣沒有很好, 直接用 *mcs_mask 比較好, 這兩個在作為 function argument 時是一樣的。  
+```c
+for (i = 0; i < sizeof(mcs_mask); i++)
+```
+這會有一個問題, sizeof(mcs_mask) 是回傳整個 array 的 size(byte), 而不是回傳 array 有多少 element。  
+應該用
+```c
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
 ```
