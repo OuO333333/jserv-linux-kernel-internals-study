@@ -197,3 +197,19 @@ int main() {
 ```
 gcc -o char2 char2.c  
 注意, char *p = "hello world"; 是不能 p[0] = 'H'; 的。, 所以加上了 const。 
+  
+-------------------------------------------------------------  
+
+指標本身不可變更 (Constant pointer to variable): const 在 * 之後  
+```c
+char * const pContent;
+```
+指標所指向的內容不可變更 (Pointer to constant): const 在 * 之前  
+```c
+const char * pContent;
+char const * pContent;
+```
+兩者都不可變更  
+```c
+const char * const pContent;
+```
