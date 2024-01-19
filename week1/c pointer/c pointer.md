@@ -263,15 +263,24 @@ if(wait_event_interruptible(mychar_data->wait_queue, mychar_data -> process_coun
     return -ERESTARTSYS; /* signal received or interrupted */
 }
 ```
-上面的編譯會通過, 雖然 mychar_data->wait_queue 是個變量, 但他會被解釋成指針, 所以會過。
+上面的編譯會通過, mychar_data->wait_queue 是個變量, 所以會過。
 ```c
 if(wait_event_interruptible(&mychar_data->wait_queue, mychar_data -> process_count == 0)){
     return -ERESTARTSYS; /* signal received or interrupted */
 }
 ```
 上面的編譯會不會通過, 會有 error: lvalue required as unary ‘&’ operand。
-因為 &mychar_data->wait_queue 不是一個指針, 是一個 rvalue, 而 wait_event_interruptible 要求 lvalue, 所以不會過。
-example:
+因為 &mychar_data->wait_queue 是一個指針, 而 wait_event_interruptible 要求的是變量, 所以不會過。
+```c
+wait_queue_head_t *wq = &mychar_data->wait_queue;
+if(wait_event_interruptible(wq, mychar_data -> process_count == 0)){
+    return -ERESTARTSYS; /* signal received or interrupted */
+}
+```
+上面的編譯會通過, *wq 是個 wait_queue_head_t 的變量。  
+  
+-------------------------------------------------------------  
+  
 ```c
 int a = 10;
 int *E = &a;
@@ -280,10 +289,3 @@ int *E = &a;
 ```
 a++ 會回傳 a 的 value, 而這個 value 是暫存值也就是個 non-lvalue(rvalue),  
 而 ++() 這個 operator 的 operand 必須要是一個 lvalue, 因為要寫回 data, 需要有地方 (location) 可寫入。
-```c
-wait_queue_head_t *wq = &mychar_data->wait_queue;
-if(wait_event_interruptible(wq, mychar_data -> process_count == 0)){
-    return -ERESTARTSYS; /* signal received or interrupted */
-}
-```
-上面的編譯會通過, wq 是個 wait_queue_head_t 的指針, 是 lvalue。
