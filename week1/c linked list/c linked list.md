@@ -82,3 +82,72 @@ void append_indirect(int value, list_entry_t **head)
     *indirect = new;
 }
 ```
+  
+-------------------------------------------------------------  
+
+案例探討: LeetCode 21. Merge Two Sorted Lists  
+LeetCode 21. Merge Two Sorted Lists 簡述:  
+```
+Merge two sorted linked lists and return it as a sorted list. The list should be made by splicing together the nodes of the first two lists.
+(給定二個已排序的 linked list, 傳回合併過後的 linked list)
+```
+直觀的做法是, 提供一個暫時節點, 依序將內含值較小的節點串上, 最後回傳暫時節點指向的次個節點:
+```c
+struct ListNode *mergeTwoLists(struct ListNode *L1, struct ListNode *L2) {
+    struct ListNode *head = malloc(sizeof(struct ListNode));
+    struct ListNode *ptr = head;
+    while (L1 && L2) {
+        if (L1->val < L2->val) {
+            ptr->next = L1;
+            L1 = L1->next;
+        } else {
+            ptr->next = L2;
+            L2 = L2->next;
+        }
+        ptr = ptr->next;
+    }
+    ptr->next = L1 ? L1 : L2;
+    return head->next;
+}
+```
+倘若我們想避免配置暫時節點的空間 (即上方程式碼中的 malloc), 該怎麼做？運用上述 indirect pointer 的技巧:
+```c
+struct ListNode *mergeTwoLists(struct ListNode *L1,
+                               struct ListNode *L2) { 
+    struct ListNode *head;
+    struct ListNode **ptr = &head;
+    for (; L1 && L2; ptr = &(*ptr)->next) {
+        if (L1->val < L2->val) {
+            *ptr = L1;
+            L1 = L1->next;
+        } else {
+            *ptr = L2;
+            L2 = L2->next;
+        }
+    }
+    *ptr = (struct ListNode *)((uintptr_t) L1 | (uintptr_t) L2);
+    return head;
+}
+```
+以下可以不用看, 很不直觀。  
+觀察使用 indirect pointer 版本的程式碼, 其中 if-else 的程式碼都是將 ptr 指向下一個要接上的節點,  
+之後將節點更新到下一個,不過要為 L1 跟 L2 分開寫同樣的程式碼, 該如何簡化？可以再使用一個指標的指標來指向 L1 或 L2。
+```c
+struct ListNode *mergeTwoLists(struct ListNode *L1, struct ListNode *L2) {
+    struct ListNode *head = NULL, **ptr = &head, **node;
+
+    for (node = NULL; L1 && L2; *node = (*node)->next) {
+        node = (L1->val < L2->val) ? &L1: &L2;
+        *ptr = *node;
+        ptr = &(*ptr)->next;
+    }
+    *ptr = (struct ListNode *)((uintptr_t) L1 | (uintptr_t) L2);
+    return head;
+}
+```
+注意 node = L1->val < L2->val? &L1: &L2 不能寫成 node = &(L1->val < L2->val? L1: L2), 依據 C99 規格書 6.5.15 的註腳:
+```
+A conditional expression does not yield an lvalue
+```
+因此無法使用 & (address of) 去取得 L1->val < L2->val? L1: L2 的地址, 只能分開取得 L1 和 L2 的地址。
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/6797cc65-c37e-4bc3-af0b-7b0232b2dc14)
