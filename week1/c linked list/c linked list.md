@@ -151,3 +151,55 @@ A conditional expression does not yield an lvalue
 ```
 因此無法使用 & (address of) 去取得 L1->val < L2->val? L1: L2 的地址, 只能分開取得 L1 和 L2 的地址。
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/6797cc65-c37e-4bc3-af0b-7b0232b2dc14)
+  
+-------------------------------------------------------------  
+
+LeetCode 23. Merge k Sorted Lists 則將 LeetCode 21. Merge Two Sorted Lists 指定的 2 個 linked list 擴充為 k 個的合併,  
+其本質就是將分割好的 sorted lists 合併成一條，示意如下:  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/69dbf149-caea-4638-bc2b-6872046ffcbc)  
+顯然在 merge 階段可延用上述 mergeTwoLists 函式, 至於 list 合併的方向就是演算法勝出的關鍵, 可能的思路如下:  
+1\. naive  
+&nbsp;&nbsp;&nbsp;&nbsp;直觀地用第一條串列接上剩下的串列, 這樣會導致 lists[0] 愈來愈長, 立即會遇到的問題是：多數的情況下合併速度會愈來愈慢。
+```c
+struct ListNode *mergeKLists(struct ListNode **lists, int listsSize) {
+    if (listsSize == 0) return NULL;
+    for (int i = 1; i < listsSize; i++)
+        lists[0] = mergeTwoLists(lists[0], lists[i]);
+    return lists[0];
+}
+```
+2\. 頭跟尾兩兩合併  
+&nbsp;&nbsp;&nbsp;&nbsp;從固定第一條串列改成頭跟尾兩兩合併, 直到剩一條為止, 比起前一方法的每次都用愈來愈長的串列跟另一條串列合併,  
+頭尾合併在多數的情況下兩條串列的長度比較平均, 合併會比較快。  
+當合併完頭尾後, 偶數長度會少一半, 奇數長度則為 (listsSize + 1) / 2, 奇數更新的方式也可以用在偶數長度上。
+```c
+struct ListNode *mergeKLists(struct ListNode **lists, int listsSize) {
+    if (listsSize == 0) return NULL;
+    
+    while (listsSize > 1) {
+        for (int i = 0, j = listsSize - 1; i < j; i++, j--)
+            lists[i] = mergeTwoLists(lists[i], lists[j]);
+        listsSize = (listsSize + 1) / 2;
+    }
+    
+    return lists[0];
+}
+```
+3\. 分段合併  
+參考 https://hackmd.io/@sysprog/c-linked-list#%E6%A1%88%E4%BE%8B%E6%8E%A2%E8%A8%8E-LeetCode-21-Merge-Two-Sorted-Lists  
+4\. Divide and Conquer  
+&nbsp;&nbsp;&nbsp;&nbsp;由於 lists 中的串列已排序, 可視為 sorted element, 直接進行 merge sort:
+```c
+struct ListNode *mergeKLists(struct ListNode **lists, int listsSize) {
+    if (!listsSize)
+        return NULL;
+    if (listsSize <= 1)
+        return *lists;
+
+    int m = listsSize >> 1;
+    struct ListNode *left = mergeKLists(lists, m);
+    struct ListNode *right = mergeKLists(lists + m, listsSize - m);
+
+    return mergeTwoLists(left, right);
+}
+```
