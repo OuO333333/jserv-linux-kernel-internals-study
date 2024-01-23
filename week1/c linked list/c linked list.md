@@ -38,3 +38,47 @@ void remove_list_node(List *list, Node *target)
 ```
 Linus Torvalds 的想法則是拿一個指標指向「節點裡頭指向下個節點 的指標」，以「要更新的位址」為思考點來操作。
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/4d336e7a-3bae-41bd-9f97-9b764fa9182c)
+  
+-------------------------------------------------------------  
+  
+針對鏈結串列的新增節點的操作，考慮以下程式碼:
+```c
+void append(int value, list_entry_t **head)
+{
+    list_entry_t *direct = *head;
+    list_entry_t *prev = NULL;
+
+    list_entry_t *new = malloc(1 * sizeof(list_entry_t));
+    new->value = value, new->next = NULL;
+
+    while (direct) {
+        prev = direct;           
+        direct = direct->next;
+    }
+
+    if (prev)
+        prev->next = new;
+    else
+        *head = new;
+}
+```
+函式的參數列表中, 之所以用 list_entry_t **head, 而非 list_entry_t *head, 是因為原本傳入的 head 可能會被變更,  
+但 C 語言在參數傳遞時永遠都是傳遞數值 (副本), 於是若接受 list_entry_t *head 做為參數, 那就要提供 append 函式的傳回值, 也就是說, 該函式原型宣告變為:
+```c
+list_entry_t *append(int value, list_entry_t *head);
+```
+如此就不優雅且顯得累贅。運用上述 indirect pointer 的技巧,我們可重寫 append 函式如下:
+```c
+void append_indirect(int value, list_entry_t **head)
+{
+    list_entry_t **indirect = head;
+
+    list_entry_t *new = malloc(1 * sizeof(list_entry_t));
+    new->value = value, new->next = NULL;
+
+    while (*indirect)
+        indirect = &((*indirect)->next);
+
+    *indirect = new;
+}
+```
