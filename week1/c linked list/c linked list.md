@@ -153,7 +153,7 @@ A conditional expression does not yield an lvalue
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/6797cc65-c37e-4bc3-af0b-7b0232b2dc14)
   
 -------------------------------------------------------------  
-
+  
 LeetCode 23. Merge k Sorted Lists 則將 LeetCode 21. Merge Two Sorted Lists 指定的 2 個 linked list 擴充為 k 個的合併,  
 其本質就是將分割好的 sorted lists 合併成一條，示意如下:  
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/69dbf149-caea-4638-bc2b-6872046ffcbc)  
@@ -203,3 +203,13 @@ struct ListNode *mergeKLists(struct ListNode **lists, int listsSize) {
     return mergeTwoLists(left, right);
 }
 ```
+  
+-------------------------------------------------------------  
+
+案例探討: Leetcode 2095. Delete the Middle Node of a Linked List  
+這部份沒看了, 指標的指標好難用,  
+只有用最簡單的方式寫出這題。  
+https://github.com/OuO333333/leetcode/tree/master  
+  
+-------------------------------------------------------------  
+
