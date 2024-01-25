@@ -213,3 +213,11 @@ https://github.com/OuO333333/leetcode/tree/master
   
 -------------------------------------------------------------  
 
+案例探討: LeetCode 86. Partition List  
+這部份沒看了, 指標的指標好難用,  
+只有用最簡單的方式寫出這題。  
+https://github.com/OuO333333/leetcode/blob/master/Partition%20List.cpp  
+  
+-------------------------------------------------------------  
+
+  
