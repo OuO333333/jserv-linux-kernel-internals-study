@@ -3,7 +3,6 @@
 而對於設備樹的處理，基本上就在 setup_arch() 這個函數中。  
 
 ------------------------------------------------------------------------------------------------
-
 ```c
 void __init __no_sanitize_address setup_arch(char **cmdline_p)
 {    
@@ -27,4 +26,38 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
 1. setup_machine_fdt()：根據傳入的設備樹dtb的首地址完成一些初始化操作。
 2. arm_memblock_init()：主要是內存相關函數，為設備樹保留相應的內存空間，保證設備樹dtb本身存在於內存中而不被覆蓋。用戶可以在設備樹中設置保留內存，這一部分同時作了保留指定內存的工作。
 3. unflatten_device_tree()：對設備樹具體的解析，事實上在這個函數中所做的工作就是將設備樹各節點轉換成相應的struct device_node結構體。
-下面我們再來通過代碼跟蹤仔細分析。
+下面我們再來通過代碼跟蹤仔細分析。  
+------------------------------------------------------------------------------------------------
+  
+```c
+static void __init setup_machine_fdt(phys_addr_t dt_phys)
+{
+        int size;
+        void *dt_virt = fixmap_remap_fdt(dt_phys, &size, PAGE_KERNEL);
+        const char *name;
+
+        if (dt_virt)
+                memblock_reserve(dt_phys, size);
+
+        if (!dt_virt || !early_init_dt_scan(dt_virt)) {
+                pr_crit("\n"
+                        "Error: invalid device tree blob at physical address %pa (virtual address 0x%p)\n"
+                        "The dtb must be 8-byte aligned and must not exceed 2 MB in size\n"
+                        "\nPlease check your bootloader.",
+                        &dt_phys, dt_virt);
+
+                while (true)
+                        cpu_relax();
+        }
+
+        /* Early fixups are done, map the FDT as read-only now */
+        fixmap_remap_fdt(dt_phys, &size, PAGE_KERNEL_RO);
+
+        name = of_flat_dt_get_machine_name();
+        if (!name)
+                return;
+
+        pr_info("Machine model: %s\n", name);
+        dump_stack_set_arch_desc("%s (DT)", name);
+}
+```
