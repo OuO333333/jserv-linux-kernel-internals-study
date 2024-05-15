@@ -1,7 +1,8 @@
+reference:  
 https://www.cnblogs.com/schips/p/linux_driver_dtb_to_device_node.html  
 http://www.wowotech.net/memory_management/440.html  
 https://www.cnblogs.com/zhangzhiwei122/p/16060453.html  
-
+https://zhuanlan.zhihu.com/p/523477612
 
 
 ![Screenshot from 2024-05-13 15-15-31](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/935030ae-a2e0-4b96-b6af-655c7b42dc72)  
