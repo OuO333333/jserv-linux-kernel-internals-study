@@ -117,11 +117,12 @@ void *__init fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot)
 
         BUILD_BUG_ON(__fix_to_virt(FIX_FDT_END) >> SWAPPER_TABLE_SHIFT !=
                      __fix_to_virt(FIX_BTMAP_BEGIN) >> SWAPPER_TABLE_SHIFT);
-
+        // offset 為 dtb 在 physical address 中這個 2M block 中的起始位置
         offset = dt_phys % SWAPPER_BLOCK_SIZE;
         dt_virt = (void *)dt_virt_base + offset;
 
         /* map the first chunk so we can read the size from the header */
+        // 這裡映射2M空間。
         create_mapping_noalloc(round_down(dt_phys, SWAPPER_BLOCK_SIZE),
                         dt_virt_base, SWAPPER_BLOCK_SIZE, prot);
 
@@ -131,7 +132,7 @@ void *__init fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot)
         *size = fdt_totalsize(dt_virt);
         if (*size > MAX_FDT_SIZE)
                 return NULL;
-
+        // 如果(dtb 文件起始地址 + size)超過上一個建立映射的地址範圍，就必須緊接著再映射2M空間。
         if (offset + *size > SWAPPER_BLOCK_SIZE)
                 create_mapping_noalloc(round_down(dt_phys, SWAPPER_BLOCK_SIZE), dt_virt_base,
                                round_up(offset + *size, SWAPPER_BLOCK_SIZE), prot);
