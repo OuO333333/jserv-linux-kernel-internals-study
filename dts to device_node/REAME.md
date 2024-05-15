@@ -138,17 +138,26 @@ void *__init fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot)
         return dt_virt;
 }
 ```
+從上述可以知道, logical address 會為了 fixmap 預留一塊空間。  
+FIX_FDT_END = 1, 為 dtb 在 fixmap 中的起始 page。  
+FIX_FDT = 1024, 為 dtb 在 fixmap 中的最後一個 page。  
+PAGE_SIZE = 4096, 為 4K。  
+__fix_to_virt(FIX_FDT) 會得到 fix 中的 dtb 在 logical address 中的起始位置。  
+```c
+// PAGE_SHIFT = 12, 與 PAGE_SIZE = 4096 同義
+// FIXADDR_TOP 為 fixmap 結束的 logical address, 其必為 2M 對齊。
+// FIXADDR_START 為 fixmap 起始的 logical address。
+#define __fix_to_virt(x)	(FIXADDR_TOP - ((x) << PAGE_SHIFT))
+#define __virt_to_fix(x)	((FIXADDR_TOP - ((x) & PAGE_MASK)) >> PAGE_SHIFT)
+```
 MAX_FDT_SIZE = 2M, 因為需要對齊 2M, 所以
 ```c
 #define FIX_FDT_SIZE		(MAX_FDT_SIZE + SZ_2M)
 ```
-FIX_FDT_END = 1, 為 dtb 在 fix 中的起始 page。  
-PAGE_SIZE = 4096, 為 4K。  
-FIX_FDT = 1024, 為 dtb 在 FDT 中的最後一個 page。  
-__fix_to_virt(FIX_FDT) 會得到 fix 中的 dtb 在 logical address 中的起始位置。
-其中, 會從 dtb 搬兩個 2M 到 fix,  
+會從 dtb 搬兩個 2M 對齊的到 fixmap,  
 但 dtb 在 physical address 不是 2M 對齊的, 所以要取
 ```c
+// SWAPPER_BLOCK_SIZE = 2M
 offset = dt_phys % SWAPPER_BLOCK_SIZE;
 dt_virt = (void *)dt_virt_base + offset;
 ```
