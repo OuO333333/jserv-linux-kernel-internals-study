@@ -139,8 +139,8 @@ void *__init fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot)
 }
 ```
 從上述可以知道, logical address 會為了 fixmap 預留一塊空間。  
-FIX_FDT_END = 1, 為 dtb 在 fixmap 中的起始 page。  
-FIX_FDT = 1024, 為 dtb 在 fixmap 中的最後一個 page。  
+FIX_FDT_END = 1, 為 dtb 在 fixmap 中的起始 page number。  
+FIX_FDT = 1024, 為 dtb 在 fixmap 中的最後一個 page number。  
 PAGE_SIZE = 4096, 為 4K。  
 __fix_to_virt(FIX_FDT) 會得到 fix 中的 dtb 在 logical address 中的起始位置。  
 ```c
