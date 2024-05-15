@@ -13,7 +13,7 @@ http://www.wowotech.net/memory_management/fixmap.html
 2. fixmap 在哪?
 fixmap的地址區域位於FIXADDR_START和FIXADDR_TOP之間
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/18c34bea-3dbc-458d-82a0-45b37812a675)
-3. dtb image 的處理過程?
+3. dtb image 的處理過程?  
 （1）bootloader copy dtb image 到 memory 的某個位置上。  
 具體的位置隨便, 當然還是要滿足8字節對齊, dtb image 不能越過 2M section size 的邊界的要求,  
 畢竟我們也想一條section mapping就搞定dtb image。  
