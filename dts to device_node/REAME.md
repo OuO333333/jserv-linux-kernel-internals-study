@@ -10,7 +10,7 @@ http://www.wowotech.net/memory_management/fixmap.html
 在內核完全啟動之後，內存管理可以提供各種豐富的 API 讓內核的其他模塊可以完成虛擬地址分配和建立地址映射的功能，  
 但是，在內核的啟動過程中，有些模塊需要使用虛擬內存並 mapping 到指定的物理地址上，而且，這些模塊也沒有辦法等待完整的內存管理模塊初始化之後再進行地址映射。  
 因此，linux kernel 固定分配了一些 fixmap 的虛擬地址，這些地址有固定的用途，使用該地址的模塊在初始化的時候，講這些固定分配的地址mapping 到指定的物理地址上去。
-2. fixmap 在哪?
+2. fixmap 在哪?  
 fixmap的地址區域位於FIXADDR_START和FIXADDR_TOP之間
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/18c34bea-3dbc-458d-82a0-45b37812a675)
 3. dtb image 的處理過程?  
