@@ -17,9 +17,9 @@ fixmap的地址區域位於FIXADDR_START和FIXADDR_TOP之間
 （1）bootloader copy dtb image 到 memory 的某個位置上。  
 具體的位置隨便, 當然還是要滿足8字節對齊, dtb image 不能越過 2M section size 的邊界的要求,  
 畢竟我們也想一條section mapping就搞定dtb image。  
-（2）bootloader 通過寄存器 x0 傳遞 dtb image 的物理地址, dtb image 的虛擬地址在編譯 kernel image 的時候就確定了。  
+（2）bootloader 通過寄存器 x0 傳遞 dtb image 的物理地址, dtb image 的虛擬地址在編譯 kernel image 的時候就確定了。(寫死在 fixmap_remap_fdt 中)  
 （3）匯編初始化階段不對 dtb image 做任何處理  
-（4）在 start kernel 之後的初始化代碼中（具體在setup_arch--->setup_machine_fdt中）, 創建 dtb image 的相關 Translation tables, 之後就可以自由的訪問 dtb image 了。
+（4）在 start kernel 之後的初始化代碼中（具體在setup_arch--->setup_machine_fdt--->fixmap_remap_fdt--->create_mapping_noalloc中）, 創建 dtb image 的相關 映射, 之後就可以自由的訪問 dtb image 了。
 
 ------------------------------------------------------------------------------------------------
 在 head.s 完成部分初始化之後，就開始調用 C 語言函數，而被調用的第一個 C 語言函數就是 start_kernel。  
