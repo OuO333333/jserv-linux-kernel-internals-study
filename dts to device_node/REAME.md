@@ -16,13 +16,9 @@ https://zhuanlan.zhihu.com/p/523477612
 顯然，此時還不能調用內核的通用內存接口，本著哪里有困難哪里就有我的精神，fixmap作為救火隊長閃亮登場了。  
 為了解決該問題，內核為其提供了以下機制：  
 為fixmap映射單獨預留一段虛擬地址空間。在當前內核版本下其在內核總虛擬地址空間中的位置如下：
-![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/dcc7eb4b-d025-49ea-9ed8-059c583768ca)
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/a946d0c4-98b9-412d-ad9c-0be4f1a51743)
 
 
-
-　　顯然，此時還不能調用內核的通用內存接口，本著哪里有困難哪里就有我的精神，fixmap作為救火隊長閃亮登場了。為了解決該問題，內核為其提供了以下機制：
-（1）為fixmap映射單獨預留一段虛擬地址空間。在當前內核版本下其在內核總虛擬地址空間中的位置如下：
-![Screenshot from 2024-05-13 15-15-31](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/935030ae-a2e0-4b96-b6af-655c7b42dc72)  
 在 head.s 完成部分初始化之後，就開始調用 C 語言函數，而被調用的第一個 C 語言函數就是 start_kernel。  
 而對於設備樹的處理，基本上就在 setup_arch() 這個函數中。  
 
