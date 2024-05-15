@@ -2,22 +2,13 @@ reference:
 https://www.cnblogs.com/schips/p/linux_driver_dtb_to_device_node.html  
 http://www.wowotech.net/memory_management/440.html  
 https://www.cnblogs.com/zhangzhiwei122/p/16060453.html  
-https://zhuanlan.zhihu.com/p/523477612
+https://zhuanlan.zhihu.com/p/523477612  
+http://www.wowotech.net/memory_management/fixmap.html
   
 為什麽需要 fixmap?  
-在 start_kernel 之前，內核會建立 idmap_pg_dir 和 init_pg_dir 頁表，並使能 MMU，從而將系統切換到虛擬地址空間。  
-這時只有內核鏡像部分的內存被映射，而且內存管理系統還沒有初始化，因此在內核的視角只有內核鏡像部分的內存可用。  
-由於內存管理系統的重要性，接下去的當務之急自然是要盡快初始化該模塊。  
-很不幸這時我們又遇到了經典的先有雞還是先有蛋問題，內存初始化前我們需要先從 dtb 中讀取系統的內存配置信息，  
-而這需要先為 dtb 創建頁表，同時一些其它情形也需要執行內存的靜態或動態映射。  
-但是頁表創建需要兩個條件：  
-（1）需要為內存分配虛擬地址  
-（2）需要為頁表本身分配內存  
-顯然，此時還不能調用內核的通用內存接口，本著哪里有困難哪里就有我的精神，fixmap作為救火隊長閃亮登場了。  
-為了解決該問題，內核為其提供了以下機制：  
-為 fixmap 映射單獨預留一段虛擬地址空間。在當前內核版本下其在內核總虛擬地址空間中的位置如下：
-![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/a946d0c4-98b9-412d-ad9c-0be4f1a51743)  
-有了上面的條件後 fixmap 映射就很簡單了，無非就是為物理地址在 fixmap 空間中找到一塊虛擬地址空間。  
+在內核完全啟動之後，內存管理可以提供各種豐富的 API 讓內核的其他模塊可以完成虛擬地址分配和建立地址映射的功能，  
+但是，在內核的啟動過程中，有些模塊需要使用虛擬內存並 mapping 到指定的物理地址上，而且，這些模塊也沒有辦法等待完整的內存管理模塊初始化之後再進行地址映射。  
+因此，linux kernel固定分配了一些fixmap的虛擬地址，這些地址有固定的用途，使用該地址的模塊在初始化的時候，講這些固定分配的地址mapping到指定的物理地址上去。  
 
 在 head.s 完成部分初始化之後，就開始調用 C 語言函數，而被調用的第一個 C 語言函數就是 start_kernel。  
 而對於設備樹的處理，基本上就在 setup_arch() 這個函數中。  
