@@ -91,7 +91,7 @@ static void __init setup_machine_fdt(phys_addr_t dt_phys)
         dump_stack_set_arch_desc("%s (DT)", name);
 }
 ```
-fixmap_remap_fdt 透過 fdt 將 physical address map 到 logical address。  
+fixmap_remap_fdt 透過 fixmap 將 physical address map 到 logical address。  
 
 ------------------------------------------------------------------------------------------------
 ```c
@@ -152,7 +152,7 @@ void *__init fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot)
 從上述可以知道, logical address 會為了 fixmap 預留一塊空間。  
 FIX_FDT_END = 1, 為 dtb 在 fixmap 中的起始 page number。  
 FIX_FDT = 1024, 為 dtb 在 fixmap 中的最後一個 page number。  
-PAGE_SIZE = 4096, 為 4K。  
+PAGE_SIZE = 4096(bytes), 為 4K。  
 __fix_to_virt(FIX_FDT) 會得到 fix 中的 dtb 在 logical address 中的起始位置。  
 ```c
 // PAGE_SHIFT = 12, 與 PAGE_SIZE = 4096 同義
