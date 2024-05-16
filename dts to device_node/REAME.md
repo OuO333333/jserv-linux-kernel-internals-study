@@ -283,10 +283,19 @@ static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
         end = PAGE_ALIGN(virt + size);
 
         do {
+                // pgd_addr_end回傳(addr + 一個pgd entry的映射範圍)，或end，
+                // 看哪個比較小
                 next = pgd_addr_end(addr, end);
+                // addr(這個iteration要建立映射的虛擬位址的開頭)
+                // next(這個iteration要建立映射的虛擬位址結尾)
+                // phys(這個iteration要建立映射的物理位址開頭)
+                // prot, pgtable_alloc, flag傳入處理pud層級的函式
+                // alloc_init_pud建立addr~next的映射
                 alloc_init_pud(pgdp, addr, next, phys, prot, pgtable_alloc,
                                flags);
+                // phys 往前推進 next - addr
                 phys += next - addr;
+        // 換下一個 pgd entry，更新 addr，如果addr == end則結束
         } while (pgdp++, addr = next, addr != end);
 }
 ```
