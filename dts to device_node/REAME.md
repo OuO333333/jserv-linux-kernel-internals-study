@@ -178,6 +178,68 @@ dt_virt = (void *)dt_virt_base + offset;
 ------------------------------------------------------------------------------------------------
   
 最後來看, 是怎麽建立映射的。
+首先, early_fixmap_init 會先建立 Init_pg_dir, bm_pud, bm_pmd, bm_pte 4 個表間的查找關係
+```c
+void __init early_fixmap_init(void)
+{
+        pgd_t *pgdp; 
+        p4d_t *p4dp, p4d;
+        pud_t *pudp;
+        pmd_t *pmdp;
+        unsigned long addr = FIXADDR_START;
+
+        // 獲取 Init_pg_dir 中 addr 對應的 entry, Init_pg_dir 的索引位為 addr[47:39]
+        pgdp = pgd_offset_k(addr);
+
+        p4dp = p4d_offset(pgdp, addr);
+        p4d = READ_ONCE(*p4dp);
+        if (CONFIG_PGTABLE_LEVELS > 3 &&
+            !(p4d_none(p4d) || p4d_page_paddr(p4d) == __pa_symbol(bm_pud))) {
+                /*
+                 * We only end up here if the kernel mapping and the fixmap
+                 * share the top level pgd entry, which should only happen on
+                 * 16k/4 levels configurations.
+                 */
+                BUG_ON(!IS_ENABLED(CONFIG_ARM64_16K_PAGES));
+                pudp = pud_offset_kimg(p4dp, addr);
+        } else {
+                if (p4d_none(p4d))
+                        // 將 bm_pud 的物理地址寫進 Init_pg_dir 中
+                        __p4d_populate(p4dp, __pa_symbol(bm_pud), PUD_TYPE_TABLE);
+                pudp = fixmap_pud(addr);
+        }
+        if (pud_none(READ_ONCE(*pudp)))
+                // 將 bm_pmd 的物理地址寫進 bm_pud 中
+                __pud_populate(pudp, __pa_symbol(bm_pmd), PMD_TYPE_TABLE);
+        pmdp = fixmap_pmd(addr);
+        // 將 bm_pte 的物理地址寫進 bm_pmd 中
+        __pmd_populate(pmdp, __pa_symbol(bm_pte), PMD_TYPE_TABLE);
+
+        /*
+         * The boot-ioremap range spans multiple pmds, for which
+         * we are not prepared:
+         */
+        BUILD_BUG_ON((__fix_to_virt(FIX_BTMAP_BEGIN) >> PMD_SHIFT)
+                     != (__fix_to_virt(FIX_BTMAP_END) >> PMD_SHIFT));
+
+        if ((pmdp != fixmap_pmd(fix_to_virt(FIX_BTMAP_BEGIN)))
+             || pmdp != fixmap_pmd(fix_to_virt(FIX_BTMAP_END))) {
+                WARN_ON(1);
+                pr_warn("pmdp %p != %p, %p\n",
+                        pmdp, fixmap_pmd(fix_to_virt(FIX_BTMAP_BEGIN)),
+                        fixmap_pmd(fix_to_virt(FIX_BTMAP_END)));
+                pr_warn("fix_to_virt(FIX_BTMAP_BEGIN): %08lx\n",
+                        fix_to_virt(FIX_BTMAP_BEGIN));
+                pr_warn("fix_to_virt(FIX_BTMAP_END):   %08lx\n",
+                        fix_to_virt(FIX_BTMAP_END));
+
+                pr_warn("FIX_BTMAP_END:       %d\n", FIX_BTMAP_END);
+                pr_warn("FIX_BTMAP_BEGIN:     %d\n", FIX_BTMAP_BEGIN);
+        }
+}
+```
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/64010454-f169-4158-9748-bc476836052a)
+
 ```c
 static void __init create_mapping_noalloc(phys_addr_t phys, unsigned long virt,
                                   phys_addr_t size, pgprot_t prot)
