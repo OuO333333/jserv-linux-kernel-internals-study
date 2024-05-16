@@ -141,7 +141,7 @@ void *__init fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot)
         *size = fdt_totalsize(dt_virt);
         if (*size > MAX_FDT_SIZE)
                 return NULL;
-        // 如果(dtb 文件起始地址 + size)超過上一個建立映射的地址範圍，就必須緊接著再映射2M空間。
+        // 如果(dtb 文件起始地址 + size)超過上一個建立映射的地址範圍，就必須緊接著再映射 2M 空間。
         if (offset + *size > SWAPPER_BLOCK_SIZE)
                 create_mapping_noalloc(round_down(dt_phys, SWAPPER_BLOCK_SIZE), dt_virt_base,
                                round_up(offset + *size, SWAPPER_BLOCK_SIZE), prot);
@@ -172,3 +172,48 @@ MAX_FDT_SIZE = 2M, 因為需要對齊 2M, 所以
 offset = dt_phys % SWAPPER_BLOCK_SIZE;
 dt_virt = (void *)dt_virt_base + offset;
 ```
+------------------------------------------------------------------------------------------------
+  
+最後來看, 是怎麽建立映射的。
+```c
+static void __init create_mapping_noalloc(phys_addr_t phys, unsigned long virt,
+                                  phys_addr_t size, pgprot_t prot)
+{
+        if ((virt >= PAGE_END) && (virt < VMALLOC_START)) {
+                pr_warn("BUG: not creating mapping for %pa at 0x%016lx - outside kernel range\n",
+                        &phys, virt);
+                return;
+        }
+        __create_pgd_mapping(init_mm.pgd, phys, virt, size, prot, NULL,
+                             NO_CONT_MAPPINGS);
+}
+```
+```c
+static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
+                                 unsigned long virt, phys_addr_t size,
+                                 pgprot_t prot,
+                                 phys_addr_t (*pgtable_alloc)(int),
+                                 int flags)
+{
+        unsigned long addr, end, next;
+        pgd_t *pgdp = pgd_offset_pgd(pgdir, virt);
+
+        /*
+         * If the virtual and physical address don't have the same offset
+         * within a page, we cannot map the region as the caller expects.
+         */
+        if (WARN_ON((phys ^ virt) & ~PAGE_MASK))
+                return;
+
+        phys &= PAGE_MASK;
+        addr = virt & PAGE_MASK;
+        end = PAGE_ALIGN(virt + size);
+
+        do {
+                next = pgd_addr_end(addr, end);
+                alloc_init_pud(pgdp, addr, next, phys, prot, pgtable_alloc,
+                               flags);
+                phys += next - addr;
+        } while (pgdp++, addr = next, addr != end);
+}
+```c
