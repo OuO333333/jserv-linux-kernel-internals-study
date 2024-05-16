@@ -7,11 +7,11 @@ http://www.wowotech.net/memory_management/fixmap.html
 
 認識 dtb 怎麽轉換成 device_node 要先認識 fixmap。  
 1. 為什麽需要 fixmap?  
-在內核完全啟動之後，內存管理可以提供各種豐富的 API 讓內核的其他模塊可以完成虛擬地址分配和建立地址映射的功能，  
-但是，在內核的啟動過程中，有些模塊需要使用虛擬內存並 mapping 到指定的物理地址上，而且，這些模塊也沒有辦法等待完整的內存管理模塊初始化之後再進行地址映射。  
-因此，linux kernel 固定分配了一些 fixmap 的虛擬地址，這些地址有固定的用途，使用該地址的模塊在初始化的時候，講這些固定分配的地址mapping 到指定的物理地址上去。
+在內核完全啟動之後, 內存管理可以提供各種豐富的 API 讓內核的其他模塊可以完成虛擬地址分配和建立地址映射的功能,  
+在內核的啟動過程中, 有些模塊需要使用虛擬內存並 mapping 到指定的物理地址上, 而且, 這些模塊也沒有辦法等待完整的內存管理模塊初始化之後再進行地址映射。  
+因此, linux kernel 固定分配了一些 fixmap 的虛擬地址, 這些地址有固定的用途, 使用該地址的模塊在初始化的時候, 講這些固定分配的地址mapping 到指定的物理地址上去。
 2. fixmap 在哪?  
-fixmap的地址區域位於FIXADDR_START和FIXADDR_TOP之間
+fixmap 的地址區域位於 FIXADDR_START 和 FIXADDR_TOP 之間
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/18c34bea-3dbc-458d-82a0-45b37812a675)
 3. dtb image 的處理過程?  
 （1）bootloader copy dtb image 到 memory 的某個位置上。  
@@ -19,11 +19,20 @@ fixmap的地址區域位於FIXADDR_START和FIXADDR_TOP之間
 畢竟我們也想一條section mapping就搞定dtb image。  
 （2）bootloader 通過寄存器 x0 傳遞 dtb image 的物理地址, dtb image 的虛擬地址在編譯 kernel image 的時候就確定了。(寫死在 fixmap_remap_fdt 中)  
 （3）匯編初始化階段不對 dtb image 做任何處理  
-（4）在 start kernel 之後的初始化代碼中（具體在setup_arch--->setup_machine_fdt--->fixmap_remap_fdt--->create_mapping_noalloc中）, 創建 dtb image 的相關 映射, 之後就可以自由的訪問 dtb image 了。
+（4）在 start kernel 之後的初始化代碼中（具體在setup_arch--->setup_machine_fdt--->fixmap_remap_fdt--->create_mapping_noalloc中）, 創建 dtb image 的相關映射, 之後就可以自由的訪問 dtb image 了。
 
 ------------------------------------------------------------------------------------------------
 在 head.s 完成部分初始化之後，就開始調用 C 語言函數，而被調用的第一個 C 語言函數就是 start_kernel。  
 而對於設備樹的處理，基本上就在 setup_arch() 這個函數中。
+```c
+asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+{
+        char *command_line;
+        // ...
+        setup_arch(&command_line);
+        // ...
+}
+```
 ```c
 void __init __no_sanitize_address setup_arch(char **cmdline_p)
 {    
