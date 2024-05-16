@@ -6,6 +6,7 @@ https://zhuanlan.zhihu.com/p/523477612
 http://www.wowotech.net/memory_management/fixmap.html
 https://blog.csdn.net/yhb1047818384/article/details/108328097  
 https://www.laumy.tech/798.html  
+https://rhythm16.github.io/page_table/  
 
 
 認識 dtb 怎麽轉換成 device_node 要先認識 fixmap。  
