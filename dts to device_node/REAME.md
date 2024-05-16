@@ -283,7 +283,7 @@ static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
         end = PAGE_ALIGN(virt + size);
 
         do {
-                // pgd_addr_end回傳(addr + 一個pgd entry的映射範圍)，或end，
+                // pgd_addr_end回傳(addr + 一個 pgd entry 的映射範圍)，或end，
                 // 看哪個比較小
                 next = pgd_addr_end(addr, end);
                 // addr(這個iteration要建立映射的虛擬位址的開頭)
@@ -299,3 +299,9 @@ static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
         } while (pgdp++, addr = next, addr != end);
 }
 ```
+經實驗,  
+phys = 0x42400000  
+virt = 0xfffffffefe600000  
+end = 0xfffffffefe800000  
+size = 2097152  
+確實只搬 2M。
