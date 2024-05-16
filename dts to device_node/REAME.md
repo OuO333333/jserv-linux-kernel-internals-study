@@ -254,6 +254,13 @@ static void __init create_mapping_noalloc(phys_addr_t phys, unsigned long virt,
 }
 ```
 ```c
+// pgdir: 想要建立映射的頁表的根(虛擬位址)
+// phys: 建立映射的物理位址起始位址
+// virt: 建立映射的虛擬位址起始位址
+// size: 映射的大小
+// prot: 映射的屬性
+// pgtable_alloc; 建立頁表過程中，使用的記憶體分配函式
+// flags: 一些決定建立頁表過程行為的選項
 static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
                                  unsigned long virt, phys_addr_t size,
                                  pgprot_t prot,
