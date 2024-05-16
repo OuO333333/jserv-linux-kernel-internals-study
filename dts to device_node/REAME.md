@@ -4,6 +4,9 @@ http://www.wowotech.net/memory_management/440.html
 https://www.cnblogs.com/zhangzhiwei122/p/16060453.html  
 https://zhuanlan.zhihu.com/p/523477612  
 http://www.wowotech.net/memory_management/fixmap.html
+https://blog.csdn.net/yhb1047818384/article/details/108328097  
+https://www.laumy.tech/798.html  
+
 
 認識 dtb 怎麽轉換成 device_node 要先認識 fixmap。  
 1. 為什麽需要 fixmap?  
