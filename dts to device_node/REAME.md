@@ -216,4 +216,4 @@ static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
                 phys += next - addr;
         } while (pgdp++, addr = next, addr != end);
 }
-```c
+```
