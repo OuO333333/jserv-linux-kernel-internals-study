@@ -299,9 +299,9 @@ static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
         } while (pgdp++, addr = next, addr != end);
 }
 ```
-經實驗,  
-phys = 0x42400000  
-virt = 0xfffffffefe600000  
-end = 0xfffffffefe800000  
-size = 2097152  
-確實只搬 2M。
+經實驗, create_mapping_noalloc 下的 __create_pgd_mapping:  
+phys = 0x42400000,  
+virt = 0xfffffffefe600000,  
+end = 0xfffffffefe800000,  
+size = 2097152,  
+
