@@ -277,7 +277,8 @@ static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
          */
         if (WARN_ON((phys ^ virt) & ~PAGE_MASK))
                 return;
-
+        // 從 2M 對齊的 physical address, logical address 開始 map
+        // 但是要 map 完整個 size, 所以 end 是(virt + size)
         phys &= PAGE_MASK;
         addr = virt & PAGE_MASK;
         end = PAGE_ALIGN(virt + size);
