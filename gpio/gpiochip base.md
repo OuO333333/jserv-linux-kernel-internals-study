@@ -1,5 +1,5 @@
 以 imx8mp 為例: https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/freescale/imx8mp.dtsi  
-  
+------------------------------------------------------------------------------------------------  
 什麽是 gpiochip base?  
 一個 gpio-controller 為一個 gpiochip,即我們常在 dts 跟cat sys/kernel/debug/gpio 看到的  
 ```c
