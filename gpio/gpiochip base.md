@@ -17,8 +17,7 @@ gpio1: gpio@30200000 {
 			};
 ```
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/0bda6f34-0d9f-4751-b1f9-d10353baea65)  
- 
-
 一個 gpiochip 控制著多個 gpio pin,
 每一個 gpio pin 有一個 global gpio number,  
-同一個 gpiochip 中的多個 gpio pins 的 global gpio numbers, 可以用 base + offset 來表示
+同一個 gpiochip 中的多個 gpio pins 的 global gpio numbers, 可以用 base + offset 來表示,  
+如上圖, gpiochip0 的 gpiochip base 為 0。  
