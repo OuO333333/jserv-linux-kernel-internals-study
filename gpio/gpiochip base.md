@@ -44,7 +44,7 @@ static int mxc_gpio_probe(struct platform_device *pdev)
         return pwmchip_add(chip);
 }
 ```
-接下來看 linux 是怎麽 dynamic 設定 gpiochip base 的:  
+接下來看 linux 是怎麽 static 設定 gpiochip base 的:  
 ```c
 /**
  * pwmchip_add() - register a new PWM chip
@@ -76,7 +76,7 @@ int pwmchip_add_with_polarity(struct pwm_chip *chip,
                               enum pwm_polarity polarity)
 {
 	/* ... (other initialization code) ... */
-        // 即為 dynamic 設定 gpiochip base 的地方
+        // 即為 static 設定 gpiochip base 的地方
         ret = alloc_pwms(chip->base, chip->npwm);
         /* ... (rest of the probe function) ... */
 }
@@ -176,3 +176,11 @@ EXPORT_SYMBOL(bitmap_find_next_zero_area_off);
 ```
 不難看出, static gpiochip base 雖然是指定 gpio chip base, 但還是會檢查有沒有連續沒被 occupy 的 index 能用,  
 在 alloc_pwms() 中, 若找到的連續沒被 occupy 的起點, 與指定的不同, 則會報錯。  
+
+------------------------------------------------------------------------------------------------
+在我使用的板子, 他會 probe 兩次(執行兩次 mxc_gpio_probe()),  
+因此改成 static gpiochip base 後, 會出錯,  
+第 1 次的 probe 會成功, 因為第 1 次指定 gpiochip base 時, 是沒被 occupy 的,  
+第 2 次的 probe 會失敗, 因為第 2 次指定 gpiochip base 時, 還是指定相同的 gpiochip base, 而這時已經被第一次 occupy 了。
+
+------------------------------------------------------------------------------------------------
