@@ -16,7 +16,8 @@ gpio1: gpio@30200000 {
 				gpio-ranges = <&iomuxc 0 5 30>;
 			};
 ```
-![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/b0163b6b-8f0f-4075-90f4-0bf33270e1a8)  
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/0bda6f34-0d9f-4751-b1f9-d10353baea65)  
+ 
 
 一個 gpiochip 控制著多個 gpio pin,
 每一個 gpio pin 有一個 global gpio number,  
