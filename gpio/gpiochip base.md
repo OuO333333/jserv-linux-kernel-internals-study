@@ -22,3 +22,5 @@ gpio1: gpio@30200000 {
 每一個 gpio pin 有一個 global gpio number,  
 同一個 gpiochip 中的多個 gpio pins 的 global gpio numbers, 可以用 base + offset 來表示,  
 如上圖, gpiochip0 的 gpiochip base 為 0。  
+
+------------------------------------------------------------------------------------------------  
