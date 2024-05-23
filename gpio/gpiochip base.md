@@ -31,13 +31,14 @@ gpiochip base 的設定分成兩種方法,
 第二種是 static gpiochip base  
 
 ------------------------------------------------------------------------------------------------  
-先來看 dynamic gpiochip base,  
+先來看 static gpiochip base,  
 以 /drivers/gpio/gpio-pca953x.c, 為例,
-設定 dynamic gpiochip base 的地方在:  
+設定 static gpiochip base 的地方在:  
 ```c
 static int mxc_gpio_probe(struct platform_device *pdev)
 {
 	/* ... (other initialization code) ... */
+        // 在這裡設定你要的 gpiochip base
         chip->base = -1;
         /* ... (rest of the probe function) ... */
         return pwmchip_add(chip);
@@ -91,10 +92,13 @@ static int alloc_pwms(int pwm, unsigned int count)
 
 	if (pwm >= 0)
 		from = pwm;
-
+        // MAX_PWMS 為 allocated_pwms 長度
+        // from 為 開始找的 index
+        // count 為 連續找多少個還沒被 occupy 的 index
+        // 根據 allocated_pwms, 找出從 from 開始第一個連續還沒被 occupy 的index
 	start = bitmap_find_next_zero_area(allocated_pwms, MAX_PWMS, from,
 					   count, 0);
-
+        // 若找出的與 pwm(指定的) 不同, 則失敗
 	if (pwm >= 0 && start != pwm)
 		return -EEXIST;
 
@@ -104,3 +108,71 @@ static int alloc_pwms(int pwm, unsigned int count)
 	return start;
 }
 ```
+```c
+/**
+ * bitmap_find_next_zero_area - find a contiguous aligned zero area
+ * @map: The address to base the search on
+ * @size: The bitmap size in bits
+ * @start: The bitnumber to start searching at
+ * @nr: The number of zeroed bits we're looking for
+ * @align_mask: Alignment mask for zero area
+ *
+ * The @align_mask should be one less than a power of 2; the effect is that
+ * the bit offset of all zero areas this function finds is multiples of that
+ * power of 2. A @align_mask of 0 means no alignment is required.
+ */
+static inline unsigned long
+bitmap_find_next_zero_area(unsigned long *map,
+                           unsigned long size,
+                           unsigned long start,
+                           unsigned int nr,
+                           unsigned long align_mask)
+{
+        return bitmap_find_next_zero_area_off(map, size, start, nr,
+                                              align_mask, 0);
+}
+```
+```c
+/**
+ * bitmap_find_next_zero_area_off - find a contiguous aligned zero area
+ * @map: The address to base the search on
+ * @size: The bitmap size in bits
+ * @start: The bitnumber to start searching at
+ * @nr: The number of zeroed bits we're looking for
+ * @align_mask: Alignment mask for zero area
+ * @align_offset: Alignment offset for zero area.
+ *
+ * The @align_mask should be one less than a power of 2; the effect is that
+ * the bit offset of all zero areas this function finds plus @align_offset
+ * is multiple of that power of 2.
+ */
+unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
+                                             unsigned long size,
+                                             unsigned long start,
+                                             unsigned int nr,
+                                             unsigned long align_mask,
+                                             unsigned long align_offset)
+{
+        unsigned long index, end, i;
+again:
+        // 找第一個為 0 的 index
+        index = find_next_zero_bit(map, size, start);
+        /* Align allocation */
+        index = __ALIGN_MASK(index + align_offset, align_mask) - align_offset;
+        // end 為該次最多檢查到第幾個 index
+        end = index + nr;
+        if (end > size) 
+                return end;
+        // 在 index 與 end 間找第一個為 1 的索引
+        i = find_next_bit(map, end, index);
+        // 若 index 與 end 間有 1, 則下一次從 i + 1 開始找
+        if (i < end) {
+                start = i + 1; 
+                goto again;
+        }
+        return index; 
+}
+EXPORT_SYMBOL(bitmap_find_next_zero_area_off);
+```
+不難看出, static gpiochip base 雖然是指定 gpio chip base, 但還是會檢查有沒有連續沒被 occupy 的 index 能用,  
+在 alloc_pwms() 中, 若找到的連續沒被 occupy 的起點, 與指定的不同, 則會報錯。  
