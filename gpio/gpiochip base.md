@@ -32,8 +32,8 @@ gpiochip base 的設定分成兩種方法,
 
 ------------------------------------------------------------------------------------------------  
 dynamic gpiochip base 跟 static gpiochip base 是在同個地方進行設定,  
-以 /drivers/gpio/gpio-pca953x.c, 為例,
-設定 dynamic gpiochip base 的地方在:  
+以 /drivers/gpio/gpio-pca953x.c, 為例, 他是 dynamic gpiochip base,  
+其設定 dynamic gpiochip base 的地方在:  
 ```c
 static int pca953x_probe(struct i2c_client *client,
 			 const struct i2c_device_id *i2c_id)
