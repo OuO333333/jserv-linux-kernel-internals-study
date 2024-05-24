@@ -167,8 +167,9 @@ static int gpiochip_find_base(int ngpio)
 }
 ```
 
-不難看出, dynamic gpiochip base 在指定 gpiochip base = -1 時運作,  
-運作方式如下:  
+不難看出, dynamic gpiochip base 在指定 gpiochip base < 0 時運作,  
+大於 0 時則使用 static gpiochip base,  
+dynamic gpiochip base 運作方式如下:  
 
 
 ------------------------------------------------------------------------------------------------
