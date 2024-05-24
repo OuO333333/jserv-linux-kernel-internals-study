@@ -143,14 +143,11 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
 /* dynamic allocation of GPIOs, e.g. on a hotplugged device */
 static int gpiochip_find_base(int ngpio)
 {
-        printk("In gpiochip_find_base:\n");
         struct gpio_device *gdev;
         int base = ARCH_NR_GPIOS - ngpio;
 
         list_for_each_entry_reverse(gdev, &gpio_devices, list) {
                 /* found a free space? */
-                printk("gdev->base = %d\n", gdev->base);
-                printk("gdev->ngpio = %d\n", gdev->ngpio);
                 if (gdev->base + gdev->ngpio <= base)
                         break;
                 else
@@ -168,29 +165,35 @@ static int gpiochip_find_base(int ngpio)
 }
 ```
 
-不難看出, static gpiochip base 雖然是指定 gpio chip base, 但還是會檢查有沒有連續沒被 occupy 的 index 能用,  
-在 alloc_pwms() 中, 若找到的連續沒被 occupy 的起點, 與指定的不同, 則會報錯。  
+不難看出, dynamic gpiochip base 在指定 gpiochip base = -1 時運作,  
+運作方式如下:  
+
 
 ------------------------------------------------------------------------------------------------
-在我使用的板子, 他會 probe 兩次(兩個 device map 到這個 driver, 執行兩次 mxc_gpio_probe()),  
+怎麽將 dynamic gpiochip base 改成使用 static gpiochip base?  
+在我使用的板子, 他會 probe 兩次(兩個 device map 到這個 driver, 執行兩次 pca953x_probe()),  
 因此改成 static gpiochip base 後, 會出錯,  
 第 1 次的 probe 會成功, 因為第 1 次指定 gpiochip base 時, 是沒被 occupy 的,  
 第 2 次的 probe 會失敗, 因為第 2 次指定 gpiochip base 時, 還是指定相同的 gpiochip base, 而這時已經被第一次 occupy 了。  
 解決的方法如下:
 ```c
 static int count = 0;
-static int mxc_gpio_probe(struct platform_device *pdev)
+```c
+static int pca953x_probe(struct i2c_client *client,
+			 const struct i2c_device_id *i2c_id)
 {
 	/* ... (other initialization code) ... */
-        // 在這裡設定你要的 gpiochip base
-        if(count == 0)
-	    chip->base = 333;
-        else
-	    chip->base = 353;
         count++;
+        if(count == 1)
+            chip->gpio_chip.base = 333;
+        else
+            chip->gpio_chip.base = 353;
+	ret = devm_gpiochip_add_data(&client->dev, &chip->gpio_chip, chip);
+	if (ret)
+		goto err_exit;
         /* ... (rest of the probe function) ... */
-        return pwmchip_add(chip);
 }
+```
 ```
 
 ------------------------------------------------------------------------------------------------
