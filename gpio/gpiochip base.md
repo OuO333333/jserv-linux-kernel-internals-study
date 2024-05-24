@@ -38,9 +38,11 @@ gpiochip base 的設定分成兩種方法,
 static int pca953x_probe(struct i2c_client *client,
 			 const struct i2c_device_id *i2c_id)
 {
+	/* ... (other initialization code) ... */
 	ret = devm_gpiochip_add_data(&client->dev, &chip->gpio_chip, chip);
 	if (ret)
 		goto err_exit;
+        /* ... (rest of the probe function) ... */
 }
 ```
 接下來看 linux 是怎麽 dynamic 設定 gpiochip base 的:  
