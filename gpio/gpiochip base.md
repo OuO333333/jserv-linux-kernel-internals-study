@@ -31,7 +31,7 @@ gpiochip base 的設定分成兩種方法,
 第二種是 static gpiochip base  
 
 ------------------------------------------------------------------------------------------------  
-先來看 dynamic gpiochip base,  
+dynamic gpiochip base 跟 static gpiochip base 是在同個地方進行設定,  
 以 /drivers/gpio/gpio-pca953x.c, 為例,
 設定 dynamic gpiochip base 的地方在:  
 ```c
