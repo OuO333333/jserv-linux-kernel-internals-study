@@ -35,7 +35,8 @@ gpiochip base 的設定分成兩種方法,
 以 /drivers/gpio/gpio-pca953x.c, 為例,
 設定 static gpiochip base 的地方在:  
 ```c
-static int mxc_gpio_probe(struct platform_device *pdev)
+static int max7313_pwm_probe(struct device *dev,
+			     struct pca953x_chip *pca_chip)
 {
 	/* ... (other initialization code) ... */
         // 在這裡設定你要的 gpiochip base
