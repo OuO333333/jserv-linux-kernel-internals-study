@@ -170,7 +170,8 @@ static int gpiochip_find_base(int ngpio)
 不難看出, dynamic gpiochip base 在指定 gpiochip base < 0 時運作,  
 大於 0 時則使用 static gpiochip base,  
 dynamic gpiochip base 運作方式如下:  
-![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/3a3362ef-296c-400f-8728-10709d045a1e)
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/1b618e0c-35be-4e10-97e7-c2481293f25d)
+
 
 ------------------------------------------------------------------------------------------------
 怎麽將 dynamic gpiochip base 改成使用 static gpiochip base?  
