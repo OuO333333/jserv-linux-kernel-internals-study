@@ -193,7 +193,7 @@ static int pca953x_probe(struct i2c_client *client,
         /* ... (rest of the probe function) ... */
 }
 ```
-結果如下:
+結果如下:  
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/13ad13e2-ec4f-49b2-8577-a5bdd1d13baf)  
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/202ed52b-561c-4e2b-a92e-e747f58b943a)
 
