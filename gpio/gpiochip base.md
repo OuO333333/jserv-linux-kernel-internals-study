@@ -31,150 +31,143 @@ gpiochip base 的設定分成兩種方法,
 第二種是 static gpiochip base  
 
 ------------------------------------------------------------------------------------------------  
-先來看 static gpiochip base,  
+先來看 dynamic gpiochip base,  
 以 /drivers/gpio/gpio-pca953x.c, 為例,
-設定 static gpiochip base 的地方在:  
+設定 dynamic gpiochip base 的地方在:  
 ```c
-static int max7313_pwm_probe(struct device *dev,
-			     struct pca953x_chip *pca_chip)
+static int pca953x_probe(struct i2c_client *client,
+			 const struct i2c_device_id *i2c_id)
 {
-	/* ... (other initialization code) ... */
-        // 在這裡設定你要的 gpiochip base
-        chip->base = -1;
-        /* ... (rest of the probe function) ... */
-        return pwmchip_add(chip);
+	ret = devm_gpiochip_add_data(&client->dev, &chip->gpio_chip, chip);
+	if (ret)
+		goto err_exit;
 }
 ```
-接下來看 linux 是怎麽 static 設定 gpiochip base 的:  
+接下來看 linux 是怎麽 dynamic 設定 gpiochip base 的:  
 ```c
-/**
- * pwmchip_add() - register a new PWM chip
- * @chip: the PWM chip to add
- *
- * Register a new PWM chip. If chip->base < 0 then a dynamically assigned base
- * will be used. The initial polarity for all channels is normal.
- *
- * Returns: 0 on success or a negative error code on failure.
- */
-int pwmchip_add(struct pwm_chip *chip)
-{
-        return pwmchip_add_with_polarity(chip, PWM_POLARITY_NORMAL);
-}
-```
-```c
-/**
- * pwmchip_add_with_polarity() - register a new PWM chip
- * @chip: the PWM chip to add
- * @polarity: initial polarity of PWM channels
- *
- * Register a new PWM chip. If chip->base < 0 then a dynamically assigned base
- * will be used. The initial polarity for all channels is specified by the
- * @polarity parameter.
- *
- * Returns: 0 on success or a negative error code on failure.
- */
-int pwmchip_add_with_polarity(struct pwm_chip *chip,
-                              enum pwm_polarity polarity)
-{
-	/* ... (other initialization code) ... */
-        // 即為 static 設定 gpiochip base 的地方
-        ret = alloc_pwms(chip->base, chip->npwm);
-        /* ... (rest of the probe function) ... */
-}
-```
-```c
-static int alloc_pwms(int pwm, unsigned int count)
-{
-	unsigned int from = 0;
-	unsigned int start;
+#define gpiochip_add_data(gc, data) ({          \
+                static struct lock_class_key lock_key;  \
+                static struct lock_class_key request_key;         \
+                gpiochip_add_data_with_key(gc, data, &lock_key, \
+                                           &request_key);         \
+        })
+#define devm_gpiochip_add_data(dev, gc, data) ({ \
+                static struct lock_class_key lock_key;  \
+                static struct lock_class_key request_key;         \
+                devm_gpiochip_add_data_with_key(dev, gc, data, &lock_key, \
+                                           &request_key);         \
+        })
+#else
+#define gpiochip_add_data(gc, data) gpiochip_add_data_with_key(gc, data, NULL, NULL)
+#define devm_gpiochip_add_data(dev, gc, data) \
+        devm_gpiochip_add_data_with_key(dev, gc, data, NULL, NULL)
 
-	if (pwm >= MAX_PWMS)
-		return -EINVAL;
-
-	if (pwm >= 0)
-		from = pwm;
-        // MAX_PWMS 為 allocated_pwms 長度
-        // from 為 開始找的 index
-        // count 為 連續找多少個還沒被 occupy 的 index
-        // 根據 allocated_pwms, 找出從 from 開始第一個連續還沒被 occupy 的index
-	start = bitmap_find_next_zero_area(allocated_pwms, MAX_PWMS, from,
-					   count, 0);
-        // 若找出的與 pwm(指定的) 不同, 則失敗
-	if (pwm >= 0 && start != pwm)
-		return -EEXIST;
-
-	if (start + count > MAX_PWMS)
-		return -ENOSPC;
-
-	return start;
-}
 ```
 ```c
 /**
- * bitmap_find_next_zero_area - find a contiguous aligned zero area
- * @map: The address to base the search on
- * @size: The bitmap size in bits
- * @start: The bitnumber to start searching at
- * @nr: The number of zeroed bits we're looking for
- * @align_mask: Alignment mask for zero area
+ * devm_gpiochip_add_data_with_key() - Resource managed gpiochip_add_data_with_key()
+ * @dev: pointer to the device that gpio_chip belongs to.
+ * @gc: the GPIO chip to register
+ * @data: driver-private data associated with this chip
+ * @lock_key: lockdep class for IRQ lock
+ * @request_key: lockdep class for IRQ request
  *
- * The @align_mask should be one less than a power of 2; the effect is that
- * the bit offset of all zero areas this function finds is multiples of that
- * power of 2. A @align_mask of 0 means no alignment is required.
- */
-static inline unsigned long
-bitmap_find_next_zero_area(unsigned long *map,
-                           unsigned long size,
-                           unsigned long start,
-                           unsigned int nr,
-                           unsigned long align_mask)
-{
-        return bitmap_find_next_zero_area_off(map, size, start, nr,
-                                              align_mask, 0);
-}
-```
-```c
-/**
- * bitmap_find_next_zero_area_off - find a contiguous aligned zero area
- * @map: The address to base the search on
- * @size: The bitmap size in bits
- * @start: The bitnumber to start searching at
- * @nr: The number of zeroed bits we're looking for
- * @align_mask: Alignment mask for zero area
- * @align_offset: Alignment offset for zero area.
+ * Context: potentially before irqs will work
  *
- * The @align_mask should be one less than a power of 2; the effect is that
- * the bit offset of all zero areas this function finds plus @align_offset
- * is multiple of that power of 2.
+ * The gpio chip automatically be released when the device is unbound.
+ *
+ * Returns:
+ * A negative errno if the chip can't be registered, such as because the
+ * gc->base is invalid or already associated with a different chip.
+ * Otherwise it returns zero as a success code.
  */
-unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
-                                             unsigned long size,
-                                             unsigned long start,
-                                             unsigned int nr,
-                                             unsigned long align_mask,
-                                             unsigned long align_offset)
+int devm_gpiochip_add_data_with_key(struct device *dev, struct gpio_chip *gc, void *data,
+                                    struct lock_class_key *lock_key,
+                                    struct lock_class_key *request_key)
 {
-        unsigned long index, end, i;
-again:
-        // 找第一個為 0 的 index
-        index = find_next_zero_bit(map, size, start);
-        /* Align allocation */
-        index = __ALIGN_MASK(index + align_offset, align_mask) - align_offset;
-        // end 為該次最多檢查到第幾個 index
-        end = index + nr;
-        if (end > size) 
-                return end;
-        // 在 index 與 end 間找第一個為 1 的索引
-        i = find_next_bit(map, end, index);
-        // 若 index 與 end 間有 1, 則下一次從 i + 1 開始找
-        if (i < end) {
-                start = i + 1; 
-                goto again;
+        struct gpio_chip **ptr;
+        int ret;
+
+        ptr = devres_alloc(devm_gpio_chip_release, sizeof(*ptr),
+                             GFP_KERNEL);
+        if (!ptr)
+                return -ENOMEM;
+
+        ret = gpiochip_add_data_with_key(gc, data, lock_key, request_key);
+        if (ret < 0) {
+                devres_free(ptr);
+                return ret;     
         }
-        return index; 
+
+        *ptr = gc;            
+        devres_add(dev, ptr);
+
+        return 0;
 }
-EXPORT_SYMBOL(bitmap_find_next_zero_area_off);
+EXPORT_SYMBOL_GPL(devm_gpiochip_add_data_with_key);
+
 ```
+```c
+int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+                               struct lock_class_key *lock_key,
+                               struct lock_class_key *request_key)
+{
+	/* ... (other initialization code) ... */
+        /*
+         * TODO: this allocates a Linux GPIO number base in the global
+         * GPIO numberspace for this chip. In the long run we want to
+         * get *rid* of this numberspace and use only descriptors, but
+         * it may be a pipe dream. It will not happen before we get rid
+         * of the sysfs interface anyways.
+         */
+        if (base < 0) {
+                base = gpiochip_find_base(gc->ngpio);
+                if (base < 0) {
+                        ret = base;
+                        spin_unlock_irqrestore(&gpio_lock, flags);
+                        goto err_free_label;
+                }
+                /*
+                 * TODO: it should not be necessary to reflect the assigned
+                 * base outside of the GPIO subsystem. Go over drivers and
+                 * see if anyone makes use of this, else drop this and assign
+                 * a poison instead.
+                 */
+                gc->base = base;
+        }
+        gdev->base = base;
+        /* ... (rest of the probe function) ... */
+}
+```
+```c
+/* dynamic allocation of GPIOs, e.g. on a hotplugged device */
+static int gpiochip_find_base(int ngpio)
+{
+        printk("In gpiochip_find_base:\n");
+        struct gpio_device *gdev;
+        int base = ARCH_NR_GPIOS - ngpio;
+
+        list_for_each_entry_reverse(gdev, &gpio_devices, list) {
+                /* found a free space? */
+                printk("gdev->base = %d\n", gdev->base);
+                printk("gdev->ngpio = %d\n", gdev->ngpio);
+                if (gdev->base + gdev->ngpio <= base)
+                        break;
+                else
+                        /* nope, check the space right before the chip */
+                        base = gdev->base - ngpio;
+        }
+
+        if (gpio_is_valid(base)) {
+                pr_debug("%s: found new base at %d\n", __func__, base);
+                return base;
+        } else {
+                pr_err("%s: cannot find free range\n", __func__);
+                return -ENOSPC;
+        }
+}
+```
+
 不難看出, static gpiochip base 雖然是指定 gpio chip base, 但還是會檢查有沒有連續沒被 occupy 的 index 能用,  
 在 alloc_pwms() 中, 若找到的連續沒被 occupy 的起點, 與指定的不同, 則會報錯。  
 
