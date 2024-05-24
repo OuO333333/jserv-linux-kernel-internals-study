@@ -178,7 +178,6 @@ static int gpiochip_find_base(int ngpio)
 解決的方法如下:
 ```c
 static int count = 0;
-```c
 static int pca953x_probe(struct i2c_client *client,
 			 const struct i2c_device_id *i2c_id)
 {
@@ -193,7 +192,6 @@ static int pca953x_probe(struct i2c_client *client,
 		goto err_exit;
         /* ... (rest of the probe function) ... */
 }
-```
 ```
 
 ------------------------------------------------------------------------------------------------
