@@ -181,6 +181,22 @@ EXPORT_SYMBOL(bitmap_find_next_zero_area_off);
 在我使用的板子, 他會 probe 兩次(執行兩次 mxc_gpio_probe()),  
 因此改成 static gpiochip base 後, 會出錯,  
 第 1 次的 probe 會成功, 因為第 1 次指定 gpiochip base 時, 是沒被 occupy 的,  
-第 2 次的 probe 會失敗, 因為第 2 次指定 gpiochip base 時, 還是指定相同的 gpiochip base, 而這時已經被第一次 occupy 了。
+第 2 次的 probe 會失敗, 因為第 2 次指定 gpiochip base 時, 還是指定相同的 gpiochip base, 而這時已經被第一次 occupy 了。  
+解決的方法如下:
+```c
+static int count = 0;
+static int mxc_gpio_probe(struct platform_device *pdev)
+{
+	/* ... (other initialization code) ... */
+        // 在這裡設定你要的 gpiochip base
+        if(count == 0)
+	    chip->base = 333;
+        else
+	    chip->base = 353;
+        count++;
+        /* ... (rest of the probe function) ... */
+        return pwmchip_add(chip);
+}
+```
 
 ------------------------------------------------------------------------------------------------
