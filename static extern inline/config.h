@@ -1,0 +1,1 @@
+# define CONFIG_IS_STATIC_INLINE n

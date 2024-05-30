@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "my.h"
 void func()
 {
