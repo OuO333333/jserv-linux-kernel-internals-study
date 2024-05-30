@@ -1,8 +1,9 @@
 #include <stdio.h>
 #ifdef IS_STATIC_INLINE
+#include "function.h"
 static inline void func()
 {
-   printf("Is static inline func.\n");
+   function();
 }
 #else
 extern void func();
