@@ -1,4 +1,4 @@
-#define IS_STATIC_INLINE
+#include "config.h"
 #include "my.h"
 int main() {
     func();

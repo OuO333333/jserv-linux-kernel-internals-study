@@ -1,1 +1,1 @@
-# define CONFIG_IS_STATIC_INLINE n
+#define IS_STATIC_INLINE 'y'
