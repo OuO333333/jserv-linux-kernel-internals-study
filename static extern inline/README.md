@@ -4,5 +4,5 @@ inline: 編譯器的優化, 將 function 內嵌
   
 內容說明:  
 1. 用 config.h 來控制 func()
-2. 若有 define IS_STATIC_INLINE 且為 'y', 則在 my.h 中定義 func()
-3. 若沒有 define IS_STATIC_INLINE 或 IS_STATIC_INLINE 不為 'y', 則在 function.h 中定義 func()
+2. 若 IS_STATIC_INLINE 為 'y', 則在 my.h 中定義 func()
+3. 若 IS_STATIC_INLINE 不為 'y', 則在 function.h 中定義 func()
