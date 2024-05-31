@@ -13,6 +13,38 @@
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/b9632615-4a32-4f22-b56c-3d32b3fae12b)
 
 ------------------------------------------------------------------------------------------------  
+```c
+#define might_sleep_if(cond) do { if (cond) might_sleep(); } while (0)
+```
+```c
+#ifdef CONFIG_DEBUG_ATOMIC_SLEEP
+extern void ___might_sleep(const char *file, int line, int preempt_offset);
+extern void __might_sleep(const char *file, int line, int preempt_offset);
+extern void __cant_sleep(const char *file, int line, int preempt_offset);
+
+/**
+ * might_sleep - annotation for functions that can sleep
+ *
+ * this macro will print a stack trace if it is executed in an atomic
+ * context (spinlock, irq-handler, ...). Additional sections where blocking is
+ * not allowed can be annotated with non_block_start() and non_block_end()
+ * pairs.
+ *
+ * This is a useful debugging help to be able to catch problems early and not
+ * be bitten later when the calling function happens to sleep when it is not
+ * supposed to.
+ */
+# define might_sleep() \
+        do { __might_sleep(__FILE__, __LINE__, 0); might_resched(); } while (0)
+```
+```c
+#else
+  static inline void ___might_sleep(const char *file, int line,
+                                   int preempt_offset) { }
+  static inline void __might_sleep(const char *file, int line,
+                                   int preempt_offset) { }
+# define might_sleep() do { might_resched(); } while (0)
+```
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/46a50c36-207b-4f89-9ed3-8cc5d8cb6648)
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/5e5f6307-45e2-4d31-b054-51c0f2609348)
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/7f9147aa-f70a-469a-a285-2b9ce578389c)
