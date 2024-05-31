@@ -1,4 +1,6 @@
-#ifdef IS_STATIC_INLINE
+#ifndef CONFIG_MY_H
+#define CONFIG_MY_H
+
 #if IS_STATIC_INLINE == 'y'
 #include "function.h"
 static inline void func()
@@ -7,7 +9,6 @@ static inline void func()
 }
 #else
 extern void func();
-#endif
-#else
-extern void func();
-#endif
+#endif // IS_STATIC_INLINE == 1
+
+#endif // CONFIG_MY_H
