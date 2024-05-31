@@ -2,7 +2,7 @@ static: 只在當前 file 可見
 extern: 在別處宣告該 function, 在別處宣告該 funtion 時需 include 宣告 extern 的檔案  
 inline: 編譯器的優化, 將 function 內嵌  
   
-若 main.c 中沒有 define IS_STATIC_INLINE, 則編譯時不用加入 function.c,  
-gcc main.c my.c 即可。  
-若 main.c 中有 define IS_STATIC_INLINE, 則編譯時不用加入 my.c,  
-gcc main.c function.c 即可。  
+內容說明:  
+1. 用 config.h 來控制 func()
+2. 若有 define IS_STATIC_INLINE 且為 'y', 則在 my.h 中定義 func()
+3. 若沒有 define IS_STATIC_INLINE 或 IS_STATIC_INLINE 不為 'y', 則在 function.h 中定義 func()
