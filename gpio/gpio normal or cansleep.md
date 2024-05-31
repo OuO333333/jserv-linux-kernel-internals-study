@@ -1,3 +1,5 @@
+reference:
+https://www.yuanguohuo.com/2020/03/31/linux-preemption-mode/  
 分析 gpio_get_value_cansleep / gpio_get_value 的差別  
 
 ------------------------------------------------------------------------------------------------  
