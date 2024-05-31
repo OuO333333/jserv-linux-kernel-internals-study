@@ -9,3 +9,4 @@
 再來是 gpio_get_value
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/bb09b836-2aaf-48a0-9daf-e65e048afb38)
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/3e83e584-9e23-43f7-9bfd-f58377c4458f)
+![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/b9632615-4a32-4f22-b56c-3d32b3fae12b)
