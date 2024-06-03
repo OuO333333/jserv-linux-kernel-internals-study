@@ -38,8 +38,9 @@ extern void __cant_sleep(const char *file, int line, int preempt_offset);
  */
 # define might_sleep() \
         do { __might_sleep(__FILE__, __LINE__, 0); might_resched(); } while (0)
-```
-```c
+
+/* ... (other initialization code) ... */
+
 #else
   static inline void ___might_sleep(const char *file, int line,
                                    int preempt_offset) { }
