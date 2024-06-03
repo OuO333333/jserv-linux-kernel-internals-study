@@ -124,6 +124,11 @@ void ___might_sleep(const char *file, int line, int preempt_offset)
 }
 EXPORT_SYMBOL(___might_sleep);
 ```
-![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/46a50c36-207b-4f89-9ed3-8cc5d8cb6648)
-![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/5e5f6307-45e2-4d31-b054-51c0f2609348)
-![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/7f9147aa-f70a-469a-a285-2b9ce578389c)
+```c
+#ifdef CONFIG_PREEMPT_VOLUNTARY
+extern int _cond_resched(void);
+# define might_resched() _cond_resched()
+#else
+# define might_resched() do { } while (0)
+#endif
+```
