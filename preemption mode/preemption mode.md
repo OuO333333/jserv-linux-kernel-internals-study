@@ -6,6 +6,7 @@ Linux kernel 有多種 Preemption mode, 這邊我們介紹其中 3 種。
 2. Voluntary Kernel Preemption (Desktop)  
 3. Preemptible Kernel (Low-Latency Desktop)
 
+------------------------------------------------------------------------------------------------  
 選擇”No Forced Preemption (Server)”產生的配置項是：
 ```
 CONFIG_PREEMPT_NONE=y
@@ -47,7 +48,13 @@ CONFIG_PREEMPT_NOTIFIERS=y
 ```
 可以看出 6.5.0-35-generic kernel 的預設是 Voluntary Kernel Preemption (Desktop)。  
 
-
-
-
-在 6.5.0-35-generic kernel 中, 已經可以動態的去改變 Preemption mode(早期的 linux kernel 需先編譯過才能改變)
+------------------------------------------------------------------------------------------------  
+在 6.5.0-35-generic kernel 中, 已經可以動態的去改變 Preemption mode(早期的 linux kernel 需先編譯過才能改變),  
+改變方式如下:  
+```
+echo "none" | sudo tee /sys/kernel/debug/sched/preempt
+```
+查看當前 Preemption mode 方法如下:  
+```
+sudo cat /sys/kernel/debug/sched/preempt
+```
