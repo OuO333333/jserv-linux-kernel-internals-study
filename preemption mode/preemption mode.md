@@ -60,19 +60,32 @@ sudo cat /sys/kernel/debug/sched/preempt
 ```
 
 ------------------------------------------------------------------------------------------------  
-以下實驗皆是進行兩次測試,  
-第 1 次 driver 中沒有加入 might_sleep(),  
-第 2 次 driver 中有加入 might_sleep()。
-
-沒有加入 might_sleep() 為:  
-task 1: sleep 3 秒  
-task 2: sleep 1 秒, 空轉 6 秒, 空轉 6 秒  
-
-有加入 might_sleep() 為:  
+以下對不同的 Preemption Mode 進行測試,  
 task 1: sleep 3 秒
 task 2: sleep 1 秒, 空轉 6 秒, might_sleep(), 空轉 6 秒  
 
 ------------------------------------------------------------------------------------------------ 
 No Forced Preemption (Server) 下只有 2 種情況會進行線程切換:  
 1. 從內核態返回用戶態的時候
-2. 在內核模式下主動放棄CPU（等待資源）(sleep 算這種)
+2. 在內核模式下主動放棄CPU（等待資源）(sleep 算這種  
+
+使用 1 個 cpu 執行結果為:  
+```
+sudo taskset --cpu-list 0 ./pthread
+```
+```
+T1 start at 1718264162.000305293
+T2 start at 1718264162.000305403
+T1 stop at 1718264175.000304070. elapse: 12.999998777 seconds.
+T2 stop at 1718264175.000304133. elapse: 12.999998730 seconds.
+```
+使用多個 cpu 執行結果為:  
+```
+sudo ./pthread
+```
+```
+T1 start at 1718264246.000711656
+T2 start at 1718264246.000711657
+T1 stop at 1718264249.000711755. elapse: 3.000000099 seconds.
+T2 stop at 1718264259.000979032. elapse: 13.000267375 seconds.
+```
