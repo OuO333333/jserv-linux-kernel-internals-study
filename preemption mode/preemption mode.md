@@ -113,20 +113,20 @@ Preemptible Kernel (Low-Latency Desktop),
 sudo taskset --cpu-list 0 ./pthread
 ```
 ```
-T1 start at 1718264162.000305293
-T2 start at 1718264162.000305403
-T1 stop at 1718264175.000304070. elapse: 12.999998777 seconds.
-T2 stop at 1718264175.000304133. elapse: 12.999998730 seconds.
+T1 start at 1718264582.000206109
+T2 start at 1718264582.000206194
+T1 stop at 1718264585.000206160. elapse: 3.000000051 seconds.
+T2 stop at 1718264595.000204247. elapse: 12.999998053 seconds.
 ```
 使用多個 CPU 執行結果為:  
 ```
 sudo ./pthread
 ```
 ```
-T1 start at 1718264246.000711656
-T2 start at 1718264246.000711657
-T1 stop at 1718264249.000711755. elapse: 3.000000099 seconds.
-T2 stop at 1718264259.000979032. elapse: 13.000267375 seconds.
+T1 start at 1718266480.000890981
+T2 start at 1718266480.000890982
+T1 stop at 1718266483.000891133. elapse: 3.000000152 seconds.
+T2 stop at 1718266493.000888412. elapse: 12.999997430 seconds.
 ```
-結果如預期, 多個 CPU 可直接視為平行處理,  
-1 個 CPU, 則 t1 sleep 後轉到 t2 sleep, 接著 t2 會執行空轉 6 秒, t2 繼續空轉 6 秒, 此時 t1, t2 結束(13 秒)。  
+結果如預期, 多個 CPU 可直接視為平行處理  
+1 個 CPU, 則 t1 sleep 後轉到 t2 sleep, 接著 t2 會執行空轉 2 秒, 此時 t1 醒來, 因為 t1 priority 較高, 所以切換到 t1, 此時 t1 結束(3 秒), 切換回 t2, 繼續空轉 4 秒, 再空轉 6 秒, 此時 t2 結束(13 秒)。  
