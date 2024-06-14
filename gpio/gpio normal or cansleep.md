@@ -151,4 +151,14 @@ might_sleep() 是沒有實質作用的。
 這個 might_resched() 就是在告訴系統我可以放棄 CPU 了, 要重新排程。  
 
 ------------------------------------------------------------------------------------------------  
+```c
+int gpiod_get_raw_value(const struct gpio_desc *desc)
+{
+        VALIDATE_DESC(desc);
+        /* Should be using gpiod_get_raw_value_cansleep() */
+        WARN_ON(desc->gdev->chip->can_sleep);
+        return gpiod_get_raw_value_commit(desc);
+}
+EXPORT_SYMBOL_GPL(gpiod_get_raw_value);
+```
 為什麽要這樣設計呢?  
