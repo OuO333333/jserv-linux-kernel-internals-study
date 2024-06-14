@@ -1,6 +1,7 @@
 reference:
 https://www.yuanguohuo.com/2020/03/31/linux-preemption-mode/  
 分析 gpio_get_value_cansleep / gpio_get_value 的差別  
+以 linux kernel 5.10.72 為例。
 
 ------------------------------------------------------------------------------------------------  
 首先是 gpio_get_value_cansleep  
@@ -133,3 +134,21 @@ extern int _cond_resched(void);
 # define might_resched() do { } while (0)
 #endif
 ```
+可以觀察到,  
+在沒有 CONFIG_DEBUG_ATOMIC_SLEEP 的情況下,  
+might_sleep() 是  
+```c
+# define might_sleep() do { might_resched(); } while (0)
+```
+在沒有 CONFIG_PREEMPT_VOLUNTARY 的情況下,  
+might_resched() 是  
+```c
+# define might_resched() do { } while (0)
+```
+也就是說, 在一般沒有開啟 CONFIG_DEBUG_ATOMIC_SLEEP 功能且是 Voluntary Kernel Preemption (Desktop) 的情況下,  
+might_sleep() 是沒有實質作用的。  
+在 Voluntary Kernel Preemption (Desktop) 的情況下(即 CONFIG_PREEMPT_VOLUNTARY 有 define), might_sleep() 會執行 might_resched(), 且 might_resched() 不為空。  
+這個 might_resched() 就是在告訴系統我可以放棄 CPU 了, 要重新排程。  
+
+------------------------------------------------------------------------------------------------  
+為什麽要這樣設計呢?  
