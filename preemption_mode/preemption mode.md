@@ -67,7 +67,7 @@ task 2: sleep 1 秒, 空轉 6 秒, might_sleep(), 空轉 6 秒
 1. make(編譯 mychardev.c)
 2. sudo insmod mychardev.ko
 3. sed -n '/^Character/, /^$/ { /^$/ !p }' /proc/devices
-4. gcc pthread.c -lpthread
+4. gcc pthread.c -lpthread -o pthread
 
 ------------------------------------------------------------------------------------------------ 
 No Forced Preemption (Server) 下只有 2 種情況會進行線程切換:  
