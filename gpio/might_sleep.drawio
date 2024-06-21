@@ -1,9 +1,48 @@
-<mxfile host="app.diagrams.net" modified="2024-06-21T06:03:17.513Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" version="24.5.2" etag="eG-JxpnPhKmERZrLkF88" type="github">
+<mxfile host="app.diagrams.net" modified="2024-06-21T06:26:06.292Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="-k2lEnwPukgUm5Aqxu5J" version="24.5.2" type="github">
   <diagram name="第 1 页" id="_55CB860vekRNitv7gH5">
-    <mxGraphModel>
+    <mxGraphModel dx="1434" dy="786" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="fmq-TAI2vEO312LegLpG-1" value="might_sleep" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="570" y="170" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fmq-TAI2vEO312LegLpG-5" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;CONFIG_DEBUG_ATOMIC_SLEEP&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="250" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fmq-TAI2vEO312LegLpG-8" value="CONFIG_PREEMPT_VOLUNTARY" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="670" y="250" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fmq-TAI2vEO312LegLpG-10" value="__might_sleep" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="310" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fmq-TAI2vEO312LegLpG-11" value="might_resched" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="731" y="310" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fmq-TAI2vEO312LegLpG-12" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="fmq-TAI2vEO312LegLpG-5" target="fmq-TAI2vEO312LegLpG-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="430" as="sourcePoint" />
+            <mxPoint x="750" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fmq-TAI2vEO312LegLpG-13" value="" style="endArrow=none;html=1;rounded=0;exitX=0.44;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.533;entryY=-0.133;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="fmq-TAI2vEO312LegLpG-1" target="fmq-TAI2vEO312LegLpG-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="430" as="sourcePoint" />
+            <mxPoint x="750" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fmq-TAI2vEO312LegLpG-14" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="fmq-TAI2vEO312LegLpG-10" target="fmq-TAI2vEO312LegLpG-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="430" as="sourcePoint" />
+            <mxPoint x="750" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fmq-TAI2vEO312LegLpG-16" value="" style="endArrow=none;html=1;rounded=0;entryX=0.529;entryY=1.067;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="fmq-TAI2vEO312LegLpG-11" target="fmq-TAI2vEO312LegLpG-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="430" as="sourcePoint" />
+            <mxPoint x="750" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
