@@ -198,18 +198,6 @@ static int pca953x_probe(struct i2c_client *client,
         /* ... (rest of the probe function) ... */
 }
 ```
-```c
-static int pca953x_probe(struct i2c_client *client,
-			 const struct i2c_device_id *i2c_id)
-{
-	/* ... (other initialization code) ... */
-        chip->gpio_chip.base = 333;
-	ret = devm_gpiochip_add_data(&client->dev, &chip->gpio_chip, chip);
-	if (ret)
-		goto err_exit;
-        /* ... (rest of the probe function) ... */
-}
-```
 結果如下:  
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/13ad13e2-ec4f-49b2-8577-a5bdd1d13baf)  
 ![image](https://github.com/OuO333333/jserv-linux-kernel-internals-study/assets/37506309/202ed52b-561c-4e2b-a92e-e747f58b943a)
