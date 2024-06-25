@@ -175,7 +175,7 @@ dynamic gpiochip base 運作方式如下:
 
 ------------------------------------------------------------------------------------------------
 怎麽將 dynamic gpiochip base 改成使用 static gpiochip base?  
-在我使用的板子, 他會 probe 兩次(兩個 device map 到這個 driver, 執行兩次 pca953x_probe()),  
+在我們使用的板子, 他會 probe 兩次(兩個 device map 到這個 driver, 執行兩次 pca953x_probe()),  
 因此改成 static gpiochip base 後, 會出錯,  
 第 1 次的 probe 會成功, 因為第 1 次指定 gpiochip base 時, 是沒被 occupy 的,  
 第 2 次的 probe 會失敗, 因為第 2 次指定 gpiochip base 時, 還是指定相同的 gpiochip base, 而這時已經被第一次 occupy 了。  
