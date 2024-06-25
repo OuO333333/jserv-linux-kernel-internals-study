@@ -114,6 +114,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
                                struct lock_class_key *lock_key,
                                struct lock_class_key *request_key)
 {
+        int             base = gc->base;
 	/* ... (other initialization code) ... */
         /*
          * TODO: this allocates a Linux GPIO number base in the global
