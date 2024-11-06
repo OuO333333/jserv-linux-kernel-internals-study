@@ -19,3 +19,24 @@ int main() {
     return 0;
 }
 ```
+
+2. 非volatile (Non-volatile) 變數
+非volatile變數即一般的變數，編譯器可以對它們進行優化。
+比如說，若程式中多次使用相同的變數，編譯器可能會將其值暫存，避免重複從記憶體中讀取。
+```c
+#include <stdio.h>
+
+int flag = 0; // 普通變數，編譯器可能對其讀取進行優化
+
+void interrupt_handler() {
+    flag = 1; // 中斷程序修改flag
+}
+
+int main() {
+    while (flag == 0) { 
+        // 編譯器可能認為flag永遠為0而優化這段程式，導致無法讀取到flag的變化
+    }
+    printf("中斷發生，flag 已被設為1\n");
+    return 0;
+}
+```
