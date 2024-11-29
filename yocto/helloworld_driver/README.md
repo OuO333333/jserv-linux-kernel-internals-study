@@ -9,21 +9,7 @@ Ubuntu 18.04 下 build auto_yocto_bsp bsp35.0
 1. 在 Yocto 項目根目錄下運行以下命令來創建新層
    ```bash
    bitbake-layers create-layer meta-mydrivers
-
-
-主頁
-
-視聽樂
-
-月光部落
-拼音翻譯 中文轉拼音 繁簡字對照表 文字亂碼翻譯 倉頡輸入法 國語注音 學打字
-繁體簡體轉換/編碼轉換
-繁簡轉換說明：簡體中文轉繁體中文轉簡體中文進行互相翻譯。
-
-轉換編碼說明：文字&Code轉換為內碼；同時可以使用"編碼翻譯"自由轉換!!
-
-
-       
+  
 2. 將新層添加到 `conf/bblayers.conf` 中的 `BBLAYERS` 變量中，使其成為 Yocto 項目的有效層：
 
    在 `/Yocto 項目根目錄/build_燒錄設備/conf` 文件夾中，找到 `conf/bblayers.conf` 文件，並在以下位置添加新層路徑：
