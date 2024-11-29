@@ -10,11 +10,36 @@ Ubuntu 18.04 下 build auto_yocto_bsp bsp35.0
    ```bash
    bitbake-layers create-layer meta-mydrivers
 
-2.
-&nbsp;&nbsp;&nbsp;將新層添加到 conf/bblayers.conf 中的 BBLAYERS 變量中，使其成為 Yocto 項目的有效層  
-在 /Yocto 項目根目錄/build_燒錄設備/conf 中,  
-在 BBLAYERS ?= 中加入  
-/Yocto 項目根目錄/build_燒錄設備/meta-mydrivers \
+
+主頁
+
+視聽樂
+
+月光部落
+拼音翻譯 中文轉拼音 繁簡字對照表 文字亂碼翻譯 倉頡輸入法 國語注音 學打字
+繁體簡體轉換/編碼轉換
+繁簡轉換說明：簡體中文轉繁體中文轉簡體中文進行互相翻譯。
+
+轉換編碼說明：文字&Code轉換為內碼；同時可以使用"編碼翻譯"自由轉換!!
+
+
+       
+2. 將新層添加到 `conf/bblayers.conf` 中的 `BBLAYERS` 變量中，使其成為 Yocto 項目的有效層：
+
+   在 `/Yocto 項目根目錄/build_燒錄設備/conf` 文件夾中，找到 `conf/bblayers.conf` 文件，並在以下位置添加新層路徑：
+
+   ```bash
+   BBLAYERS ?= " \
+       /Yocto 項目根目錄/build_燒錄設備/meta-mydrivers \
+       ..."
+
+    複製
+Ctrl+A or Ctrl+V 總共有：242 字
+21世紀還不懂中文輸入法，太OUT了，來!...輕鬆快樂學打字。 點此看 »
+線上工具 | Sitemap | 聯絡我們 | 繪文字 | 許願樹
+Copyright ©2024 Online Tools,All Rights Reserved. TOP
+GmailFacebookTwitterWhatsAppTelegramWeChatLine分享
+讀取中...
 
 4.
 &nbsp;&nbsp;&nbsp;編寫驅動配方
