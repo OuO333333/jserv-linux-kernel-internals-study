@@ -15,15 +15,15 @@ Ubuntu 18.04 下 build auto_yocto_bsp bsp35.0
 
 3.
   編寫驅動配方
-  在 meta-mydrivers 層中，為自定義驅動創建一個配方，例如在 recipes-kernel/mydriver/mydriver_1.0.bb
+  在 meta-mydrivers 層中，為自定義驅動創建一個配方，在 /meta-mydrivers/recipes-example/example/example_0.1.bb 中  
 
 4.
   編譯驅動並生成鏡像  
-  bitbake <image>
+  bitbake example
 
 5.
   build 出來的 .ko 檔在  
-  /Yocto 項目根目錄/build_s32g399ardb3/tmp/work/s32g399ardb3-fsl-linux/example/0.1-r0
+  /Yocto 項目根目錄/build_燒錄目標/tmp/work/燒錄目標-fsl-linux/example/0.1-r0
 
 6.
   /Yocto 項目根目錄/sources/meta-alb/recipes-fsl/images/fsl-image-auto.bb  
