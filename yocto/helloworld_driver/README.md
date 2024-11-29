@@ -11,9 +11,9 @@ Ubuntu 18.04 下 build auto_yocto_bsp bsp35.0
 &nbsp;&nbsp;&nbsp;bitbake-layers create-layer meta-mydrivers
 
 2.
-&nbsp;&nbsp;&nbsp;將新層添加到 conf/bblayers.conf 中的 BBLAYERS 變量中，使其成為 Yocto 項目的有效層
-在 /Yocto 項目根目錄/build_燒錄設備/conf 中,
-在 BBLAYERS ?= 中加入
+&nbsp;&nbsp;&nbsp;將新層添加到 conf/bblayers.conf 中的 BBLAYERS 變量中，使其成為 Yocto 項目的有效層  
+在 /Yocto 項目根目錄/build_燒錄設備/conf 中,  
+在 BBLAYERS ?= 中加入  
 /Yocto 項目根目錄/build_燒錄設備/meta-mydrivers \
 
 4.
