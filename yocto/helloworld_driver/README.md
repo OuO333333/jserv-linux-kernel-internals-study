@@ -1,10 +1,11 @@
-https://github.com/nxp-auto-linux/auto_yocto_bsp/tree/release/bsp35.0
-環境:
-Ubuntu 18.04 下 build auto_yocto_bsp bsp35.0
-燒錄版為 s32g399ardb3
-目標:
-在使用 bitbake fsl-image-auto 編譯時加入新的 driver
-並在燒錄時自動加載該 driver
+https://github.com/nxp-auto-linux/auto_yocto_bsp/tree/release/bsp35.0  
+環境:  
+Ubuntu 18.04 下 build auto_yocto_bsp bsp35.0  
+燒錄版為 s32g399ardb3  
+  
+目標:  
+在使用 bitbake fsl-image-auto 編譯時加入新的 driver  
+並在燒錄時自動加載該 driver  
 
 1.
 在 Yocto 項目根目錄下運行以下命令來創建新層
