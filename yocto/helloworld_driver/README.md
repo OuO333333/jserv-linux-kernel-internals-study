@@ -7,8 +7,8 @@ Ubuntu 18.04 下 build auto_yocto_bsp bsp35.0
 並在燒錄時自動加載該 driver  
 
 1.
-&nbsp;在 Yocto 項目根目錄下運行以下命令來創建新層
-&nbsp;bitbake-layers create-layer meta-mydrivers
+&nbsp;&nbsp;&nbsp;在 Yocto 項目根目錄下運行以下命令來創建新層
+&nbsp;&nbsp;&nbsp;bitbake-layers create-layer meta-mydrivers
 
 2.
 &nbsp;將新層添加到 conf/bblayers.conf 中的 BBLAYERS 變量中，使其成為 Yocto 項目的有效層
