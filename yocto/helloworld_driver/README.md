@@ -31,12 +31,12 @@ Ubuntu 18.04 下 build auto_yocto_bsp bsp35.0
   
 6. 編譯生成的 `.ko` 文件路徑  
    編譯完成後，生成的 `.ko` 文件位於：  
-   /Yocto 項目根目錄/build_燒錄設備/tmp/work/燒錄目標-fsl-linux/example/0.1-r0
+   `/Yocto 項目根目錄/build_燒錄設備/tmp/work/燒錄目標-fsl-linux/example/0.1-r0`
 
 
 7. 修改镜像配方  
    在以下路径找到镜像配方：  
-   /Yocto 項目根目錄/sources/meta-alb/recipes-fsl/images/fsl-image-auto.bb  
+   `/Yocto 項目根目錄/sources/meta-alb/recipes-fsl/images/fsl-image-auto.bb`  
    在配方中加入以下内容：  
 
    ```bash
