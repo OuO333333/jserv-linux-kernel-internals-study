@@ -1,0 +1,1 @@
+savedcmd_/home/tim/timgit/driver/character-device-driver/driver/Module.symvers :=  scripts/mod/modpost -m -a      -o /home/tim/timgit/driver/character-device-driver/driver/Module.symvers -T /home/tim/timgit/driver/character-device-driver/driver/modules.order -i Module.symvers -e 

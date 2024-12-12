@@ -1,0 +1,1 @@
+savedcmd_/home/tim/timgit/driver/character-device-driver/driver/mychardev.mod := printf '%s\n'   mychardev.o | awk '!x[$$0]++ { print("/home/tim/timgit/driver/character-device-driver/driver/"$$0) }' > /home/tim/timgit/driver/character-device-driver/driver/mychardev.mod
