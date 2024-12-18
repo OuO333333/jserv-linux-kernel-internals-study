@@ -17,7 +17,9 @@
 ---
 
 ### **圖示：**
-Client Server |----SYN----->| Seq = x |<---SYN-ACK--| Seq = y, Ack = x+1 |-----ACK----->| Ack = y+1
+Client ----SYN-----> Server, Seq = x  
+Client <---SYN-ACK-- Server, Seq = y, Ack = x+1  
+Client -----ACK-----> Server, Ack = y+1  
 
 
 ---
