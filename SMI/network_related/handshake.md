@@ -44,18 +44,14 @@ Client -------ACK-------> Server, Ack = y+1
 ---
 
 ### **圖示：**
-Client 發出關閉請求  
+**Client 發出關閉請求**  
 Client -------FIN-------> Server  
-Server 確認請求  
+**Server 確認請求**  
 Client <-------ACK------- Server  
-Server 發出關閉請求  
+**Server 發出關閉請求**  
 Client <-------FIN------- Server  
-Client 確認請求  
+**Client 確認請求**  
 Client -------ACK-------> Server
-
-
-Client Server |----FIN----->| Client 發出關閉請求 |<----ACK-----| Server 確認請求 |<----FIN-----| Server 發出關閉請求 |-----ACK----->| Client 確認請求
-
 
 ---
 
