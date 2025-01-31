@@ -32,7 +32,7 @@ void printList(ListNode* head) {
     cout << "NULL" << endl;
 }
 
-// 測試函數
+// 反轉鏈結串列（Reverse a Linked List）
 int main() {
     // 建立鏈表 1 -> 2 -> 3 -> 4 -> 5
     ListNode* head = new ListNode(1);

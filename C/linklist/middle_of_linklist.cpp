@@ -24,7 +24,7 @@ ListNode* findMiddle(ListNode* head) {
     return slow;  // 返回中間節點
 }
 
-// 測試函數
+// 找到鏈結串列的中間節點（Find the Middle Node of a Linked List）
 int main() {
     // 創建單鏈表 1 -> 2 -> 3 -> 4 -> 5
     ListNode* head = new ListNode(1);
