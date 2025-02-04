@@ -9,7 +9,7 @@ vector<int> num = {38, 27, 43, 3, 9, 82, 10};
 
 // 快速排序函數
 void quickSort(vector<int> &num, int L, int R) {
-    // 如果序列只有一個元素（L == R），直接返回
+    // 如果序列只有一個元素（L == R），或區間無效（L >= R），直接返回
     if (L >= R)
         return;
 
