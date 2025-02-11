@@ -1,7 +1,3 @@
-https://github.com/nxp-auto-linux/auto_yocto_bsp/tree/release/bsp35.0  
-環境:  
-Ubuntu 18.04 下 build auto_yocto_bsp bsp35.0   
-  
 目標:  
 在使用 bitbake fsl-image-auto 編譯時加入新的 driver  
 並在燒錄時自動加載該 driver  
