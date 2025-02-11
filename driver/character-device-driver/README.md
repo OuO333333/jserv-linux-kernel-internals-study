@@ -1,39 +1,51 @@
-# Character-device-driver
-How to use:  
-  &nbsp;&nbsp;&nbsp;&nbsp;In driver:  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. sudo make clean  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. sudo make  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. sudo insmod mychardev.ko  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. sed -n '/^Character/, /^$/ { /^$/ !p }' /proc/devices  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. sudo rmmod mychardev.ko  
-  &nbsp;&nbsp;&nbsp;&nbsp;In test/check.c:  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. sudo make  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. sudo make check  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. sudo tail -n50 /var/log/kern.log  
-  &nbsp;&nbsp;&nbsp;&nbsp;In test/dev.c:  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. sudo make  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. ./dev ...  
-  &nbsp;&nbsp;&nbsp;&nbsp;In test/pthread.c:  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. sudo make   
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. echo "voluntary" | sudo tee /sys/kernel/debug/sched/preempt  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. sudo ./pthread  
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. sudo taskset --cpu-list 0 ./pthread
-  
-What it do:  
-&nbsp;&nbsp;&nbsp;&nbsp;init operation:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implement static & dynamic methods to register device region  
-&nbsp;&nbsp;&nbsp;&nbsp;open/release operation:   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Linux Device Drivers, 3rd Edition, Restricting Access to a Single User at a Time  
-&nbsp;&nbsp;&nbsp;&nbsp;R/W operation:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maintain a buffer and perform r/w operations on it  
-&nbsp;&nbsp;&nbsp;&nbsp;ioctl operation:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use ioctl operation for more customized behavior on devices  
-&nbsp;&nbsp;&nbsp;&nbsp;test/dev.c:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;對 character device driver 的 buffer 進行操作。  
-&nbsp;&nbsp;&nbsp;&nbsp;test/check.c:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;檢查 access restriction 是否為 8, r/w operation, ioctl operation  
-&nbsp;&nbsp;&nbsp;&nbsp;test/pthread.c:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;環境為 Ununtu 22.04, kernel  version 為 6.5.0-35-generic, 實驗在 3 種不同 Preemption Mode 下的 might_sleep(); 的行為。  
+# What it does
+
+## init operation:
+- Implement static & dynamic methods to register device region.
+
+## open/release operation:
+- Based on *Linux Device Drivers, 3rd Edition*, restrict access to a single user at a time.
+
+## R/W operation:
+- Maintain a buffer and perform read/write operations on it.
+
+## ioctl operation:
+- Use ioctl operation for more customized behavior on devices.
+
+## test/dev.c:
+- Perform operations on the character device driver's buffer.
+
+## test/check.c:
+- Check if access restriction is set to 8, validate read/write operation, and test ioctl operation.
+
+## test/pthread.c:
+- Conduct experiments on *Ubuntu 22.04* with *kernel version 6.5.0-35-generic*.
+- Examine `might_sleep();` behavior under three different *Preemption Modes*.
+
+# How to use
+
+## In driver:
+1. `sudo make clean`
+2. `sudo make`
+3. `sudo insmod mychardev.ko`
+4. `sed -n '/^Character/, /^$/ { /^$/ !p }' /proc/devices`
+5. `sudo rmmod mychardev.ko`
+
+## In test/check.c:
+1. `sudo make`
+2. `sudo make check`
+3. `sudo tail -n50 /var/log/kern.log`
+
+## In test/dev.c:
+1. `sudo make`
+2. `./dev ...`
+
+## In test/pthread.c:
+1. `sudo make`
+2. `echo "voluntary" | sudo tee /sys/kernel/debug/sched/preempt`
+3. `sudo ./pthread`
+4. `sudo taskset --cpu-list 0 ./pthread`
+
 
 Reference:  
     &nbsp;&nbsp;&nbsp;&nbsp;character device drivers:  
