@@ -1,5 +1,5 @@
 目標:  
-在使用 bitbake fsl-image-auto 編譯時加入新的 driver  
+在使用 bitbake 編譯時加入新的 driver  
 並在燒錄時自動加載該 driver  
 
 1. 在 Yocto 項目根目錄下運行以下命令來創建新層
