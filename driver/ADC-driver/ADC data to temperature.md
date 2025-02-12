@@ -53,5 +53,7 @@ y = 4095*(x - 1)/(AVDD - 1)
 - \(AVDD\) 是 ADC 的電壓
 
 example:  
-已知 R<sub>2</sub> = 10kΩ, AVDD = 3.3V, x = 101 時,  
+已知 R<sub>2</sub> = 10kΩ, AVDD = 3.3V, x = 1798 時,  
+代入公式 3, 可得 Vin = 2.01,  
+再帶入公式 2,  
 解得 R<sub>y</sub> = 15581Ω, 經查表得 y 為 15&deg;C
