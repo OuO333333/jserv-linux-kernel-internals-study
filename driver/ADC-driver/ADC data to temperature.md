@@ -48,7 +48,7 @@ AVDD = 3.3V, 因此輸入 ADC 的電壓 V<sub>in</sub> = AVDD * R<sub>NTC</sub> 
 y = 4095*(x - 1)/(AVDD - 1)
 
 其中：
-- \(x\) 是輸入電壓 \(V_{in}\)
+- \(x\) 是輸入電壓 V<sub>in</sub>
 - \(y\) 是 ADC 的數值
 - \(AVDD\) 是 ADC 的電壓
 
