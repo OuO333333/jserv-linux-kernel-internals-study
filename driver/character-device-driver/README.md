@@ -4,7 +4,7 @@
 - Implement static & dynamic methods to register device region.
 
 ## open/release operation:
-- Based on *Linux Device Drivers, 3rd Edition*, restrict access to a single user at a time.
+- Based on *Linux Device Drivers, 3rd Edition*, restrict access to a specific users and implement blocking/noneblocking at a same time.
 
 ## R/W operation:
 - Maintain a buffer and perform read/write operations on it.
