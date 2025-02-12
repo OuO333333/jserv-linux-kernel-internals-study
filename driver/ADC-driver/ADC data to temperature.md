@@ -24,7 +24,7 @@ ADS7142 總共有 10 個引腳,
 這個外接電阻即是上圖中的 NTC, 其電阻為 R<sub>NTC</sub>,  
 我們還需要另一個電阻 R<sub>2</sub>,  
 令 R<sub>2</sub> = 10kΩ,    
-可以藉由這兩個電阻來控制輸入 ADC 的電壓 V<sub>in</sub> 在 1V - 3.56V 之間。  
+可以藉由這兩個電阻來控制輸入 ADC 的電壓 V<sub>in</sub> 在 785mV - 2.51V 之間。  
 可以看到 R<sub>NTC</sub> 與 C 並聯, 直流電中, 電容的電阻值通常被視為無限大,  
 因此這兩個電阻的總電阻是 R<sub>NTC</sub>, 又這這兩個電阻跟 R<sub>2</sub> 串聯,  
 AVDD = 3.3V, 因此輸入 ADC 的電壓 V<sub>in</sub> = AVDD * R<sub>NTC</sub> / (R<sub>NTC</sub> + R<sub>2</sub>)。  
@@ -35,10 +35,10 @@ AVDD = 3.3V, 因此輸入 ADC 的電壓 V<sub>in</sub> = AVDD * R<sub>NTC</sub> 
 圖五可以看到 R<sub>25</sub> 為 10kΩ。  
 假設最後 ADC 讀出來值為 x, 對應傳感器的溫度為 y&deg;C, 會有以下關係,  
 1\. y 經查表得到 R<sub>y</sub>  
-2\. V<sub>AINx</sub> = VDD * R<sub>y</sub> / (R<sub>y</sub> + R<sub>INx</sub>)  
+2\. V<sub>in</sub> = AVDD * R<sub>y</sub> / (R<sub>y</sub> + R<sub>2</sub>)  
 3\. x = (V<sub>AINx</sub> - 1V) / 10 mV  
 example:  
-已知 R<sub>INx</sub> = 10kΩ, VDD = 3.3V, x = 101 時,  
+已知 R<sub>2</sub> = 10kΩ, AVDD = 3.3V, x = 101 時,  
 解得 R<sub>y</sub> = 15581Ω, 經查表得 y 為 15&deg;C
 
 
