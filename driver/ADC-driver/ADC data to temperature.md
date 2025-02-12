@@ -24,7 +24,7 @@ ADS7142 總共有 10 個引腳,
 這個外接電阻即是上圖中的 NTC, 其電阻為 R<sub>NTC</sub>,  
 我們還需要另一個電阻 R<sub>2</sub>,  
 令 R<sub>2</sub> = 10kΩ,    
-可以藉由這兩個電阻來控制輸入 ADC 的電壓 V<sub>in</sub> 在 785mV - 2.51V 之間。  
+可以藉由這兩個電阻來控制輸入 ADC 的電壓 V<sub>in</sub> 在 0V - (AVDD)V 之間。  
 可以看到 R<sub>NTC</sub> 與 C 並聯, 直流電中, 電容的電阻值通常被視為無限大,  
 因此這兩個電阻的總電阻是 R<sub>NTC</sub>, 又這這兩個電阻跟 R<sub>2</sub> 串聯,  
 AVDD = 3.3V, 因此輸入 ADC 的電壓 V<sub>in</sub> = AVDD * R<sub>NTC</sub> / (R<sub>NTC</sub> + R<sub>2</sub>)。  
@@ -36,22 +36,22 @@ AVDD = 3.3V, 因此輸入 ADC 的電壓 V<sub>in</sub> = AVDD * R<sub>NTC</sub> 
 假設最後 ADC 讀出來值為 x, 對應傳感器的溫度為 y&deg;C, 會有以下關係,  
 1\. y 經查表得到 R<sub>y</sub>  
 2\. V<sub>in</sub> = AVDD * R<sub>y</sub> / (R<sub>y</sub> + R<sub>2</sub>)  
-3\. x = (V<sub>AINx</sub> - 1V) / 10 mV  
+3\. ADC 線性轉換公式
+
+對於給定的兩個點：
+
+- \((1V, 0)\)
+- \((AVDD, 4095)\)
+
+假設 ADC 的轉換關系是線性方程：
+
+y = 4095*(x - 1)/(AVDD - 1)
+
+其中：
+- \(x\) 是輸入電壓 \(V_{in}\)
+- \(y\) 是 ADC 的數值
+- \(AVDD\) 是 ADC 的電壓
+
 example:  
 已知 R<sub>2</sub> = 10kΩ, AVDD = 3.3V, x = 101 時,  
 解得 R<sub>y</sub> = 15581Ω, 經查表得 y 為 15&deg;C
-
-
-
-  
--------------------------------------------------------------  
-
-![image](https://github.com/OuO333333/driver/assets/37506309/e2c0bf2e-f41e-44cf-a5c9-1d076a5250c2)  
-進入 ADC 的電壓 V<sub>AINx</sub> 的 range 為 1V - 3.56V 之間, 又 APL6012 有 10mV 的精確度,  
-(3.56V - 1V) / 10mV  = 256,  
-兩點(1V, 0), (3.56V, 255)解聯立方程式, 得圖一  
-![image](https://github.com/OuO333333/driver/assets/37506309/91247f93-6a67-4b24-ace3-d69acc080b62)  
-![image](https://github.com/OuO333333/driver/assets/37506309/e76b75da-c1c1-43ee-b3df-2b3ed9db5b62)  
-將圖二式子帶入圖一式子, 可得圖三式子。  
-圖一二三中的 VDD 跟 VIN 為相同的東西, 應統一以 VDD 表示較適當。  
-
