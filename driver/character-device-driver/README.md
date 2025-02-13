@@ -5,6 +5,8 @@
 
 ## open/release operation:
 - Based on *Linux Device Drivers, 3rd Edition*, restrict access to a specific users and implement blocking/noneblocking at a same time.
+  ![image](https://github.com/user-attachments/assets/44ccc397-1129-4a0f-b4e8-66ee4dcc26fa)
+
 
 ## R/W operation:
 - Maintain a buffer and perform read/write operations on it.
