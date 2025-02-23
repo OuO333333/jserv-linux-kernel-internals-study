@@ -142,7 +142,7 @@ Voluntary Kernel Preemption,
 內核不會強制切換線程,  而是靠內核函數的開發者主動去放棄 CPU:  
 在複雜的代碼中, 時不時的檢查rescheduling是否必要, 這些檢查點(”explicit preemption point”)就是 might_sleep() 函數。  
 可以理解為在”No Forced Preemption”的基礎上增加了“不等待資源的主動放棄”:  
-1. 從內核態返回用戶態的時候, 和”No Forced Preemption”一樣  
+1. 從內核返回用戶態的時候, 和”No Forced Preemption”一樣  
 2. 在內核模式下主動放棄CPU(等待資源), 和”No Forced Preemption”一樣(如 sleep)  
 3. 在內核模式下主動放棄CPU(不等待資源, 如 might_sleep() 主動放棄 CPU)
 
