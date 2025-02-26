@@ -171,7 +171,8 @@ int gpiod_get_raw_value_cansleep(const struct gpio_desc *desc)
 EXPORT_SYMBOL_GPL(gpiod_get_raw_value_cansleep);
 ```
 gpiod_get_raw_value 跟 gpiod_get_raw_value_cansleep 為什麽要這樣設計呢(set 同理)?  
-這是因為 i2c / spi 會需要 sleep, 而 sleep 會釋放 CPU 使用權,  
+這是因為 i2c / spi interface 的 GPIO IO Expander,  
+透過 i2c / spi 時讀取 GPIO 會需要 sleep, 而 sleep 會釋放 CPU 使用權,  
 所以 get gpio value 不能在"不可中斷的上下文中"執行, 因此這時候就需要使用 gpiod_get_raw_value_cansleep,  
 因為他會呼叫 might_sleep(), 當你開啟 CONFIG_DEBUG_ATOMIC_SLEEP 功能時, ___might_sleep() 就會檢查是否處在"不可中斷的上下文中"。
 當你使用了 gpiod_get_raw_value, 因為是 i2c / spi, 他們的 desc->gdev->chip->can_sleep 是 1, 這時就會跟你警告, 說應該使用 gpiod_get_raw_value_cansleep。  
