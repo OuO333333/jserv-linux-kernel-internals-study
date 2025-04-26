@@ -49,20 +49,20 @@
         <mxCell id="22IwdtbsWjn6mJvlMtjX-19" value="Kernel Space" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="100" y="210" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="22IwdtbsWjn6mJvlMtjX-20" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1">
+        <mxCell id="22IwdtbsWjn6mJvlMtjX-22" value="Buffer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="160" y="256" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="22IwdtbsWjn6mJvlMtjX-23" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="169" y="240" as="sourcePoint" />
-            <mxPoint x="169" y="280" as="targetPoint" />
+            <mxPoint x="170" y="240" as="sourcePoint" />
+            <mxPoint x="170" y="256" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="22IwdtbsWjn6mJvlMtjX-21" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1">
+        <mxCell id="22IwdtbsWjn6mJvlMtjX-26" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="206" y="240" as="sourcePoint" />
-            <mxPoint x="206" y="280" as="targetPoint" />
+            <mxPoint x="206" y="256" as="targetPoint" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="22IwdtbsWjn6mJvlMtjX-22" value="Buffer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
-          <mxGeometry x="160" y="280" width="60" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
